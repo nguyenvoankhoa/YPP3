@@ -1,0 +1,29 @@
+A. Pizza Metrics
+1. How many pizzas were ordered?
+select count(*) as pizza_order from customer_orders
+2. How many unique customer orders were made?
+select count(distinct order_id) as unique_customer_orders  from customer_orders
+3. How many successful orders were delivered by each runner?
+select runner_id, count(runner_id) as successful_orders from runner_orders where distance != 0 group by runner_id 
+4. How many of each type of pizza was delivered?
+SELECT pizza_id, count(pizza_id) as orders FROM pizza_runner.customer_orders group by pizza_id;
+5. How many Vegetarian and Meatlovers were ordered by each customer?
+SELECT  customer_id , count(customer_orders.pizza_id) as orders, pizza_name as orders FROM pizza_runner.customer_orders 
+join pizza_names on customer_orders.pizza_id = pizza_names.pizza_id group by customer_orders.pizza_id, pizza_name, customer_id;
+6. What was the maximum number of pizzas delivered in a single order?
+select customer_orders.order_id, count(customer_orders.order_id) as orders from customer_orders join runner_orders on customer_orders.order_id = runner_orders.order_id where distance !=0  group by customer_orders.order_id
+7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
+select c.customer_id, sum(case when c.exclusions <> '' or c.extras <> '' then 1 else 0 end) as al_one_change , 
+sum(case when c.exclusions = '' and c.extras = '' then 1 else 0 end) as no_change
+from customer_orders_temp as c join runner_orders_temp as r on c.order_id = r.order_id
+where r.distance !=0 
+group by customer_id
+8. How many pizzas were delivered that had both exclusions and extras?
+select sum(case when exclusions is not null and extras is not null then 1 else 0 end) as result from customer_orders as c
+join runner_orders as r on c.order_id = r.order_id where r.distance >= 1 and c.exclusions <> ' ' and c.extras <> ' '
+9. What was the total volume of pizzas ordered for each hour of the day?
+SELECT count(order_id),  hour(order_time) as date_hour, date(order_time) as date_order FROM pizza_runner.customer_orders group by date_hour, date_order;
+10. What was the volume of orders for each day of the week?
+SELECT count(order_id),  hour(order_time) as date_hour, dayofweek(order_time) as date_order FROM pizza_runner.customer_orders group by date_hour, date_order;
+
+B.
