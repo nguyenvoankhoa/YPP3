@@ -237,29 +237,17 @@ GROUP BY runner_id
 ## C. Ingredient Optimisation
 ## 1.What are the standard ingredients for each pizza?
 ```sql
-SELECT 
-    COUNT(*) AS pizza_order
-FROM
-    customer_orders
+
 ```
 
 ## 2. What was the most commonly added extra?
 ```sql
-SELECT 
-    COUNT(DISTINCT order_id) AS unique_customer_orders
-FROM
-    customer_orders
+
 ```
 
 ## 3. What was the most common exclusion?
 ```sql
-SELECT 
-    runner_id, COUNT(runner_id) AS successful_orders
-FROM
-    runner_orders
-WHERE
-    distance != 0
-GROUP BY runner_id
+
 ```
 
 ## 4. Generate an order item for each record in the customers_orders table in the format of one of the following:
@@ -295,3 +283,82 @@ JOIN pizza_names ON customer_orders.pizza_id = pizza_names.pizza_id
 For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
 ## D. Pricing and Ratings
+## 1. If a Meat Lovers pizza costs $12 and Vegetarian costs $10 and there were no charges for changes - how much money has Pizza Runner made so far if there are no delivery fees?
+```sql
+SELECT sum( 
+       (CASE 
+            WHEN pizza_id = 1 THEN 10 
+            ELSE 12 
+        END)) as revenue
+FROM pizza_runner.customer_orders;
+```
+ ## 2. What if there was an additional $1 charge for any pizza extras? Add cheese is $1 extra
+```sql
+SELECT 
+    SUM(revenue) + SUM(total_revenue) + SUM(total_extras) AS total 
+FROM (
+    SELECT 
+        (CASE 
+            WHEN pizza_id = 1 THEN 10 
+            ELSE 12 
+        END) AS revenue,
+        (CASE 
+            WHEN LENGTH(exclusions) = 1 THEN 1
+            WHEN LENGTH(exclusions) > 1 THEN 2
+            ELSE 0
+        END) AS total_revenue,
+        (CASE 
+            WHEN LENGTH(extras) = 1 THEN 1
+            WHEN LENGTH(extras) > 1 THEN 2
+            ELSE 0
+        END) AS total_extras
+    FROM 
+        pizza_runner.customer_orders_temp
+) AS cte_table;
+```
+## 3. The Pizza Runner team now wants to add an additional ratings system that allows customers to rate their runner, how would you design an additional table for this new dataset - generate a schema for this new table and insert your own data for ratings for each successful customer order between 1 to 5.
+```sql
+CREATE TABLE Rating (
+    rating_id INT,
+    order_id INT,
+    rating INT CHECK (rating >= 1 AND rating <= 5)
+);
+```
+## 4. Using your newly generated table - can you join all of the information together to form a table which has the following information for successful deliveries?
+```sql
+SELECT 
+    customer_id,
+    customer_orders.order_id,
+    runner_id,
+    rating,
+    order_time,
+    pickup_time,
+    TIMESTAMPDIFF(MINUTE,
+        order_time,
+        pickup_time) AS time_diff,
+    duration,
+    (distance * 60 / duration) AS avg_speed
+FROM
+    pizza_runner.customer_orders
+        JOIN
+    runner_orders_temp ON customer_orders.order_id = runner_orders_temp.order_id
+        JOIN
+    rating ON customer_orders.order_id = rating.order_id;
+```
+## 5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over after these deliveries?
+```sql
+SELECT 
+    SUM(revenue - fee) AS profit
+FROM
+    (SELECT 
+        distance * 0.3 AS fee,
+            (CASE
+                WHEN pizza_id = 1 THEN 10
+                ELSE 12
+            END) AS revenue
+    FROM
+        pizza_runner.customer_orders
+    JOIN runner_orders_temp ON customer_orders.order_id = runner_orders_temp.order_id
+    WHERE
+        distance > 0) AS cte_table
+```
