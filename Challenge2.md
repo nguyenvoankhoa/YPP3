@@ -237,17 +237,74 @@ GROUP BY runner_id
 ## C. Ingredient Optimisation
 ## 1.What are the standard ingredients for each pizza?
 ```sql
-
+WITH RECURSIVE split_values AS (
+    SELECT
+        pizza_id,
+        CAST(SUBSTRING_INDEX(toppings, ', ', 1) AS UNSIGNED) AS topping,
+        SUBSTRING(toppings, LENGTH(SUBSTRING_INDEX(toppings, ', ', 1)) + 3) AS rest
+    FROM pizza_recipes
+    UNION ALL
+    SELECT
+        pizza_id,
+        CAST(SUBSTRING_INDEX(rest, ', ', 1) AS UNSIGNED),
+        SUBSTRING(rest, LENGTH(SUBSTRING_INDEX(rest, ', ', 1)) + 3)
+    FROM split_values
+    WHERE LENGTH(rest) > 0
+)
+SELECT 
+    pizza_id, topping
+FROM
+    split_values
 ```
 
 ## 2. What was the most commonly added extra?
 ```sql
-
+-- with cte as (
+-- select * from customer_orders_clean where extras is not null
+-- ),
+WITH RECURSIVE split_values AS (
+    SELECT
+        CAST(SUBSTRING_INDEX(extras, ', ', 1) AS UNSIGNED) AS extra,
+        SUBSTRING(extras, LENGTH(SUBSTRING_INDEX(extras, ', ', 1)) + 3) AS rest
+    FROM customer_orders_clean where extras is not null
+    UNION ALL
+    SELECT
+        CAST(SUBSTRING_INDEX(rest, ', ', 1) AS UNSIGNED),
+        SUBSTRING(rest, LENGTH(SUBSTRING_INDEX(rest, ', ', 1)) + 3)
+    FROM split_values
+    WHERE LENGTH(rest) > 0
+)
+SELECT 
+    count(extra), extra
+FROM
+    split_values
+    group by extra
+    order by count(extra) desc limit 1
 ```
 
 ## 3. What was the most common exclusion?
 ```sql
-
+-- with cte as (
+-- select * from customer_orders_clean where extras is not null
+-- ),
+WITH RECURSIVE split_values AS (
+    SELECT
+        CAST(SUBSTRING_INDEX(exclusions, ', ', 1) AS UNSIGNED) AS exclusions,
+        SUBSTRING(extras, LENGTH(SUBSTRING_INDEX(exclusions, ', ', 1)) + 3) AS rest
+    FROM customer_orders_clean where exclusions is not null
+    UNION ALL
+    SELECT
+        CAST(SUBSTRING_INDEX(rest, ', ', 1) AS UNSIGNED),
+        SUBSTRING(rest, LENGTH(SUBSTRING_INDEX(rest, ', ', 1)) + 3)
+    FROM split_values
+    WHERE LENGTH(rest) > 0
+)
+SELECT 
+    count(exclusions), exclusions
+FROM
+    split_values
+    group by exclusions
+    order by count(exclusions) desc limit 1
 ```
 
 ## 4. Generate an order item for each record in the customers_orders table in the format of one of the following:
@@ -282,6 +339,20 @@ JOIN pizza_names ON customer_orders.pizza_id = pizza_names.pizza_id
 5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the customer_orders table and add a 2x in front of any relevant ingredients
 For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+```sql
+SELECT 
+    topping, COUNT(topping) AS quantity
+FROM
+    pizza_runner.customer_orders ord
+        JOIN
+    pizza_recipe_clean cle ON ord.pizza_id = cle.pizza_id
+        JOIN
+    runner_orders run ON ord.order_id = run.order_id
+WHERE
+    pickup_time != 'null'
+GROUP BY topping
+ORDER BY quantity DESC
+```
 ## D. Pricing and Ratings
 ## 1. If a Meat Lovers pizza costs $12 and Vegetarian costs $10 and there were no charges for changes - how much money has Pizza Runner made so far if there are no delivery fees?
 ```sql
