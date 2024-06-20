@@ -118,9 +118,64 @@ select count(interest_id) from interest_metrics where interest_id in (select int
 ```
 ## Does this decision make sense to remove these data points from a business perspective? Use an example where there are all 14 months present to a removed interest example for your arguments - think about what it means to have less months present from a segment perspective.
 ```sql
+WITH few_interest AS (
+    SELECT 
+        interest_id, 
+        COUNT(DISTINCT month_year) AS month_count
+    FROM 
+        interest_metrics
+    GROUP BY 
+        interest_id
+    HAVING 
+        COUNT(DISTINCT month_year) < 6 
+),
+not_interests AS (
+    SELECT 
+        COUNT(*) AS remove_interest, 
+        month_year 
+    FROM 
+        interest_metrics 
+    WHERE 
+        interest_id IN (SELECT interest_id FROM few_interest) 
+    GROUP BY 
+        month_year
+),
+current_interests AS (
+    SELECT 
+        COUNT(*) AS current_interest, 
+        month_year 
+    FROM 
+        interest_metrics 
+    WHERE 
+        interest_id NOT IN (SELECT interest_id FROM few_interest) 
+    GROUP BY 
+        month_year
+)
+SELECT 
+    remove_interest, 
+    current_interest, 
+    not_interests.month_year, 
+    100 * remove_interest / current_interest AS remove_pct 
+FROM 
+    not_interests 
+JOIN 
+    current_interests 
+ON 
+    not_interests.month_year = current_interests.month_year;
+
 ```
 ## After removing these interests - how many unique interests are there for each month?
 ```sql
+with few_interest as
+(
+select interest_id, count(distinct month_year) as month_count
+from 
+interest_metrics
+group by interest_id
+having count(distinct month_year) <6 
+)
+select count(distinct interest_id) as current_interest , month_year from interest_metrics where interest_id not in (select interest_id from few_interest) group by month_year
+
 ```
 ## Segment Analysis
 ## Using our filtered dataset by removing the interests with less than 6 months worth of data, which are the top 10 and bottom 10 interests which have the largest composition values in any month_year? Only use the maximum composition value for each interest but you must keep the corresponding month_year
@@ -178,8 +233,4 @@ from index_table i join cte on cte.month_year = i.month_year
  join interest_map ma
  on i.interest_id=ma.id
  where avg_composition =max_avg_comp 
-
-```
-## Provide a possible reason why the max average composition might change from month to month? Could it signal something is not quite right with the overall business model for Fresh Segments?
-```sql
 ```
