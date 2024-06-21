@@ -338,7 +338,69 @@ JOIN pizza_names ON customer_orders.pizza_id = pizza_names.pizza_id
 ```
 5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the customer_orders table and add a 2x in front of any relevant ingredients
 For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
-6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+```sql
+create view clean_order as
+SELECT 
+    ord,
+    order_id,
+    customer_orders_clean.pizza_id,
+    customer_id,
+    pizza_name,
+    topping,
+    exclusions,
+    extras,
+    topping_name
+FROM
+    pizza_runner.customer_orders_clean
+        JOIN
+    pizza_recipe_clean rec ON customer_orders_clean.pizza_id = rec.pizza_id
+        JOIN
+    pizza_toppings top on rec.topping = top.topping_id
+    order by ord
+```
+```sql
+with cte as(
+SELECT 
+    order_id,
+    customer_id,
+    pizza_name,
+    pizza_id,
+    ord,
+    IF(exclusions IS NOT NULL,
+        IF(topping LIKE exclusions,
+            topping = 0,
+            topping_name),
+        topping_name) AS exclusion_topping,
+    IF(extras IS NOT NULL,
+        IF(topping LIKE extras,
+            CONCAT('2x', topping_name),
+            topping_name),
+        topping_name) AS extra_topping
+FROM
+    pizza_runner.clean_order),
+cte_2 as (
+SELECT 
+    *,
+    CASE
+        WHEN exclusion_topping = '0' THEN ''
+        ELSE extra_topping
+    END AS final_topping
+FROM
+    cte)
+
+SELECT 
+    ord,
+    CONCAT(pizza_name,
+            ' : ',
+            GROUP_CONCAT(final_topping
+                SEPARATOR ', '))
+FROM
+    cte_2
+GROUP BY ord , pizza_name
+```
+
+
+7. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
 ```sql
 SELECT 
     topping, COUNT(topping) AS quantity
