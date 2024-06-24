@@ -1,23 +1,27 @@
-## A. Pizza Metrics 
+## A. Pizza Metrics
+
 ## 1. How many pizzas were ordered?
+
 ```sql
-SELECT 
+SELECT
     COUNT(*) AS pizza_order
 FROM
     customer_orders
 ```
 
 ## 2. How many unique customer orders were made?
+
 ```sql
-SELECT 
+SELECT
     COUNT(DISTINCT order_id) AS unique_customer_orders
 FROM
     customer_orders
 ```
 
 ## 3. How many successful orders were delivered by each runner?
+
 ```sql
-SELECT 
+SELECT
     runner_id, COUNT(runner_id) AS successful_orders
 FROM
     runner_orders
@@ -27,8 +31,9 @@ GROUP BY runner_id
 ```
 
 ## 4. How many of each type of pizza was delivered?
+
 ```sql
-SELECT 
+SELECT
     pizza_id, COUNT(pizza_id) AS orders
 FROM
     pizza_runner.customer_orders
@@ -36,8 +41,9 @@ GROUP BY pizza_id;
 ```
 
 ## 5. How many Vegetarian and Meatlovers were ordered by each customer?
+
 ```sql
-SELECT 
+SELECT
     customer_id,
     COUNT(customer_orders.pizza_id) AS orders,
     pizza_name AS orders
@@ -50,8 +56,9 @@ GROUP BY customer_orders.pizza_id , pizza_name , customer_id;
 ```
 
 ## 6. What was the maximum number of pizzas delivered in a single order?
+
 ```sql
-SELECT 
+SELECT
     customer_orders.order_id,
     COUNT(customer_orders.order_id) AS orders
 FROM
@@ -66,7 +73,7 @@ GROUP BY customer_orders.order_id
 ## 7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
 
 ```sql
-SELECT 
+SELECT
     c.customer_id,
     SUM(CASE
         WHEN c.exclusions <> '' OR c.extras <> '' THEN 1
@@ -87,8 +94,9 @@ GROUP BY customer_id
 ```
 
 ## 8. How many pizzas were delivered that had both exclusions and extras?
+
 ```sql
-SELECT 
+SELECT
     SUM(CASE
         WHEN
             exclusions IS NOT NULL
@@ -107,8 +115,9 @@ WHERE
 ```
 
 ## 9. What was the total volume of pizzas ordered for each hour of the day?
+
 ```sql
-SELECT 
+SELECT
     COUNT(order_id), HOUR(order_time) AS date_hour
 FROM
     pizza_runner.customer_orders
@@ -117,8 +126,9 @@ ORDER BY date_hour;
 ```
 
 ## 10. What was the volume of orders for each day of the week?
+
 ```sql
-SELECT 
+SELECT
     COUNT(order_id) AS order_count,
     ELT(DAYOFWEEK(order_time + INTERVAL 1 DAY),
             'Monday',
@@ -135,9 +145,11 @@ ORDER BY order_count DESC
 ```
 
 ## B. Runner and Customer Experience
+
 ## 1. How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)
+
 ```sql
-SELECT 
+SELECT
     WEEK(registration_date, 1) AS week,
     COUNT(runner_id) AS register_num
 FROM
@@ -146,11 +158,12 @@ GROUP BY week
 ```
 
 ## 2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?
+
 ```sql
-SELECT 
+SELECT
     runner_id, AVG(avg_time)
 FROM
-    (SELECT 
+    (SELECT
         runner_id,
             AVG(TIMESTAMPDIFF(MINUTE, order_time, pickup_time)) AS avg_time
     FROM
@@ -163,8 +176,9 @@ GROUP BY runner_i
 ```
 
 ## 3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
+
 ```sql
-SELECT 
+SELECT
     pizza_id,
     AVG(TIMESTAMPDIFF(MINUTE,
         order_time,
@@ -179,8 +193,9 @@ GROUP BY pizza_id
 ```
 
 ## 4. What was the average distance travelled for each customer?
+
 ```sql
-SELECT 
+SELECT
     customer_id, AVG(distance)
 FROM
     customer_orders
@@ -192,8 +207,9 @@ GROUP BY customer_id
 ```
 
 ## 5. What was the difference between the longest and shortest delivery times for all orders?
+
 ```sql
-SELECT 
+SELECT
     MAX(duration) - MIN(duration) AS difference
 FROM
     customer_orders
@@ -204,8 +220,9 @@ WHERE
 ```
 
 ## 6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
+
 ```sql
-SELECT 
+SELECT
     runner_id,
     customer_id,
     pizza_id,
@@ -222,7 +239,7 @@ WHERE
 ## 7. What is the successful delivery percentage for each runner?
 
 ```sql
-SELECT 
+SELECT
     runner_id,
     100 * SUM(CASE
         WHEN distance = 0 THEN 0
@@ -235,7 +252,9 @@ GROUP BY runner_id
 ```
 
 ## C. Ingredient Optimisation
+
 ## 1.What are the standard ingredients for each pizza?
+
 ```sql
 WITH RECURSIVE split_values AS (
     SELECT
@@ -251,13 +270,14 @@ WITH RECURSIVE split_values AS (
     FROM split_values
     WHERE LENGTH(rest) > 0
 )
-SELECT 
+SELECT
     pizza_id, topping
 FROM
     split_values
 ```
 
 ## 2. What was the most commonly added extra?
+
 ```sql
 -- with cte as (
 -- select * from customer_orders_clean where extras is not null
@@ -274,7 +294,7 @@ WITH RECURSIVE split_values AS (
     FROM split_values
     WHERE LENGTH(rest) > 0
 )
-SELECT 
+SELECT
     count(extra), extra
 FROM
     split_values
@@ -283,6 +303,7 @@ FROM
 ```
 
 ## 3. What was the most common exclusion?
+
 ```sql
 -- with cte as (
 -- select * from customer_orders_clean where extras is not null
@@ -299,7 +320,7 @@ WITH RECURSIVE split_values AS (
     FROM split_values
     WHERE LENGTH(rest) > 0
 )
-SELECT 
+SELECT
     count(exclusions), exclusions
 FROM
     split_values
@@ -308,39 +329,51 @@ FROM
 ```
 
 ## 4. Generate an order item for each record in the customers_orders table in the format of one of the following:
+
 Meat Lovers
 Meat Lovers - Exclude Beef
 Meat Lovers - Extra Bacon
 Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers
+
 ```sql
-SELECT 
-	CONCAT(pizza_names.pizza_name, 
-		IF(exclusions NOT IN ('null','') AND exclusions IS NOT NULL, 
-			CONCAT(' - Exclude ', 
-				(SELECT GROUP_CONCAT(topping_name separator  ', ')
-				FROM pizza_toppings
-				WHERE FIND_IN_SET(topping_id,REPLACE(exclusions,' ','')) != 0
-				GROUP BY pizza_names.pizza_name
-				)
-			)
-        , ''), 	
-        IF(extras NOT IN ('null','') AND extras IS NOT NULL, 
-			CONCAT(' - Extra ', 
-				(SELECT GROUP_CONCAT(topping_name separator  ', ')
-				FROM pizza_toppings
-				WHERE FIND_IN_SET(topping_id,REPLACE(extras,' ','')) != 0
-				GROUP BY pizza_names.pizza_name
-				)
-            )
-        , '')) AS order_item
-FROM customer_orders
-JOIN pizza_names ON customer_orders.pizza_id = pizza_names.pizza_id
+with cte as(SELECT
+    co.order_id,
+    co.customer_id,
+    co.pizza_name,
+    co.pizza_id,
+    co.ord,
+    IF(co.exclusions IS NOT NULL, (
+        SELECT GROUP_CONCAT(t.topping_name separator ', ')
+        FROM pizza_toppings t
+        WHERE FIND_IN_SET(t.topping_id, REPLACE(co.exclusions, ' ', ''))
+    ), '') AS exclusion_topping,
+    IF(co.extras IS NOT NULL, (
+        SELECT GROUP_CONCAT(t.topping_name separator ', ')
+        FROM pizza_toppings t
+        WHERE FIND_IN_SET(t.topping_id, REPLACE(co.extras, ' ', ''))
+    ), '') AS extra_topping
+FROM
+    customer_orders_clean co)
+SELECT
+    ord,
+    CONCAT(pizza_name,
+            IF(exclusion_topping != '',
+                CONCAT(' - Exclude ', exclusion_topping),
+                ''),
+            IF(exclusion_topping != '',
+                CONCAT(' - Extra ', extra_topping),
+                '')) AS order_detail
+FROM
+    cte
+
 ```
+
 5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the customer_orders table and add a 2x in front of any relevant ingredients
-For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
+   For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
+
 ```sql
 create view clean_order as
-SELECT 
+SELECT
     ord,
     order_id,
     customer_orders_clean.pizza_id,
@@ -358,9 +391,10 @@ FROM
     pizza_toppings top on rec.topping = top.topping_id
     order by ord
 ```
+
 ```sql
 with cte as(
-SELECT 
+SELECT
     order_id,
     customer_id,
     pizza_name,
@@ -379,7 +413,7 @@ SELECT
 FROM
     pizza_runner.clean_order),
 cte_2 as (
-SELECT 
+SELECT
     *,
     CASE
         WHEN exclusion_topping = '0' THEN ''
@@ -388,21 +422,21 @@ SELECT
 FROM
     cte)
 
-SELECT 
+SELECT
     ord,
     CONCAT(pizza_name,
             ' : ',
             GROUP_CONCAT(final_topping
-                SEPARATOR ', '))
+                SEPARATOR ', ')) as topping
 FROM
     cte_2
 GROUP BY ord , pizza_name
 ```
 
-
 7. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+
 ```sql
-SELECT 
+SELECT
     topping, COUNT(topping) AS quantity
 FROM
     pizza_runner.customer_orders ord
@@ -415,41 +449,48 @@ WHERE
 GROUP BY topping
 ORDER BY quantity DESC
 ```
+
 ## D. Pricing and Ratings
+
 ## 1. If a Meat Lovers pizza costs $12 and Vegetarian costs $10 and there were no charges for changes - how much money has Pizza Runner made so far if there are no delivery fees?
+
 ```sql
-SELECT sum( 
-       (CASE 
-            WHEN pizza_id = 1 THEN 10 
-            ELSE 12 
+SELECT sum(
+       (CASE
+            WHEN pizza_id = 1 THEN 10
+            ELSE 12
         END)) as revenue
 FROM pizza_runner.customer_orders;
 ```
- ## 2. What if there was an additional $1 charge for any pizza extras? Add cheese is $1 extra
+
+## 2. What if there was an additional $1 charge for any pizza extras? Add cheese is $1 extra
+
 ```sql
-SELECT 
-    SUM(revenue) + SUM(total_revenue) + SUM(total_extras) AS total 
+SELECT
+    SUM(revenue) + SUM(total_revenue) + SUM(total_extras) AS total
 FROM (
-    SELECT 
-        (CASE 
-            WHEN pizza_id = 1 THEN 10 
-            ELSE 12 
+    SELECT
+        (CASE
+            WHEN pizza_id = 1 THEN 10
+            ELSE 12
         END) AS revenue,
-        (CASE 
+        (CASE
             WHEN LENGTH(exclusions) = 1 THEN 1
             WHEN LENGTH(exclusions) > 1 THEN 2
             ELSE 0
         END) AS total_revenue,
-        (CASE 
+        (CASE
             WHEN LENGTH(extras) = 1 THEN 1
             WHEN LENGTH(extras) > 1 THEN 2
             ELSE 0
         END) AS total_extras
-    FROM 
+    FROM
         pizza_runner.customer_orders_temp
 ) AS cte_table;
 ```
+
 ## 3. The Pizza Runner team now wants to add an additional ratings system that allows customers to rate their runner, how would you design an additional table for this new dataset - generate a schema for this new table and insert your own data for ratings for each successful customer order between 1 to 5.
+
 ```sql
 CREATE TABLE Rating (
     rating_id INT,
@@ -457,9 +498,11 @@ CREATE TABLE Rating (
     rating INT CHECK (rating >= 1 AND rating <= 5)
 );
 ```
+
 ## 4. Using your newly generated table - can you join all of the information together to form a table which has the following information for successful deliveries?
+
 ```sql
-SELECT 
+SELECT
     customer_id,
     customer_orders.order_id,
     runner_id,
@@ -478,12 +521,14 @@ FROM
         JOIN
     rating ON customer_orders.order_id = rating.order_id;
 ```
+
 ## 5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over after these deliveries?
+
 ```sql
-SELECT 
+SELECT
     SUM(revenue - fee) AS profit
 FROM
-    (SELECT 
+    (SELECT
         distance * 0.3 AS fee,
             (CASE
                 WHEN pizza_id = 1 THEN 10
