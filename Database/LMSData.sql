@@ -336,7 +336,7 @@ INSERT INTO MenteeQuestion (mentee_id, question_id, earned_marks) VALUES
 (15, 12, 10.0);
 
 -- Insert into LearningPath table
-INSERT INTO LearningPath (title, description, mentor_id, create_at, update_at) VALUES
+INSERT INTO LearningPath (title, description, mentor_id, created_at, updated_at) VALUES
 ('Introduction to Information Technology', 'Learn the basics of Information Technology.', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('UI/UX Design Fundamentals', 'Discover the principles of User Interface and User Experience design.', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Digital Marketing Essentials', 'Understand core concepts and strategies in digital marketing.', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
