@@ -7,20 +7,23 @@ import java.util.Random;
 public class Sensor {
     int currentX;
     int currentY;
-
     String action;
-    public Sensor(){
+
+    int variance;
+
+    public Sensor() {
         currentX = 0;
         currentY = 0;
     }
 
-    public Sensor(int currentX, int currentY, String action) {
+    public Sensor(int currentX, int currentY, String action, int variance) {
         this.currentX = currentX;
         this.currentY = currentY;
         this.action = action;
+        this.variance = variance;
     }
 
-    public Sensor generateRandomValue(int maxX, int maxY){
+    public Sensor generateRandomValue(int maxX, int maxY) {
         Random rand = new Random();
         int newX = rand.nextInt(maxX);
         int newY = rand.nextInt(maxY);
@@ -29,10 +32,10 @@ public class Sensor {
         actionList.add("Right");
         actionList.add("Next");
         actionList.add("Back");
-        actionList.add("Scroll Up");
-        actionList.add("Scroll Down");
-        int newAction = rand.nextInt(5);
+        actionList.add("Scroll");
+        int newAction = rand.nextInt(4);
         String action = actionList.get(newAction);
-        return new Sensor(newX, newY, action);
+        int variance = rand.nextInt(300);
+        return new Sensor(newX, newY, action, variance);
     }
 }
