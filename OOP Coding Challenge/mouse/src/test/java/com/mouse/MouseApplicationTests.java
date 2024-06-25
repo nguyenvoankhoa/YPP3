@@ -1,6 +1,7 @@
 package com.mouse;
 
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,45 +15,72 @@ class MouseApplicationTests {
 
     @Test
     void contextLoads() {
-        Mouse mouse = new Mouse();
+        List<Light> lights = new ArrayList<>();
         Light light = new Light("Logitech", "black", 100, null);
-        mouse.light.add(light);
-        mouse.wheel = new Wheel(new Shape());
+        lights.add(light);
+        Wheel wheel = new Wheel(new Shape());
+        Point point = new Point(0, 0, 0);
+        List<Point> points = new ArrayList<>();
+        points.add(point);
+        List<Button> buttons = new ArrayList<>();
         Button left = new Button("Left",
-                new Shape(
-                        new Point(0, 0, 0), true, "black", new Line("black", 0)));
+                new Shape(points, true, "black", new Line("black", 0)));
         Button right = new Button("Right",
-                new Shape(
-                        new Point(0, 0, 0), true, "black", new Line("black", 0)));
+                new Shape(points, true, "black", new Line("black", 0)));
         Button next = new Button("Next",
-                new Shape(
-                        new Point(0, 0, 0), true, "black", new Line("black", 0)));
+                new Shape(points, true, "black", new Line("black", 0)));
         Button back = new Button("Back",
-                new Shape(
-                        new Point(0, 0, 0), true, "black", new Line("black", 0)));
-        mouse.buttons.add(left);
-        mouse.buttons.add(right);
-        mouse.buttons.add(next);
-        mouse.buttons.add(back);
-        Sensor sensor = new Sensor();
-        mouse.sensor = sensor.generateRandomValue(2000, 1000);
-        for (Button btn : mouse.buttons) {
-            if (btn.type == mouse.sensor.action) {
-                btn.doButtonAction(mouse.sensor.currentX, mouse.sensor.currentY);
-            }
-        }
-        if (mouse.sensor.action == "Scroll") {
-            mouse.wheel.scroll(sensor.variance);
-        }
+                new Shape(points, true, "black", new Line("black", 0)));
+        buttons.add(left);
+        buttons.add(right);
+        buttons.add(next);
+        buttons.add(back);
+        Position position = new Position(0, 0);
+        Mouse mouse = new Mouse(lights, buttons, wheel, position);
 
 
     }
 
+
     public class Mouse {
-        public List<Light> light = new ArrayList<>();
-        public List<Button> buttons = new ArrayList<>();
+        public List<Light> light;
+        public List<Button> buttons;
         public Wheel wheel;
-        public Sensor sensor;
+        public Position position;
+
+        public Mouse(List<Light> light, List<Button> buttons, Wheel wheel, Position position) {
+            this.light = light;
+            this.buttons = buttons;
+            this.wheel = wheel;
+            this.position = position;
+        }
+
+        public Position move(int xOffset, int yOffset) {
+            this.position.x += xOffset;
+            this.position.y += yOffset;
+            return this.position;
+        }
+        public void click(String type) {
+            for (Button btn : buttons) {
+                if (btn.type == type) {
+                    btn.action("click");
+                }
+            }
+        }
+        public void doubleClick(String type) {
+            for (Button btn : buttons) {
+                if (btn.type == type) {
+                    btn.action("double click");
+                }
+            }
+        }
+        public void press(String type) {
+            for (Button btn : buttons) {
+                if (btn.type == type) {
+                    btn.action("press");
+                }
+            }
+        }
     }
 
     public class Light {
@@ -61,23 +89,40 @@ class MouseApplicationTests {
         public int opacity;
         public Shape shape;
 
+        public boolean status;
+
         public Light(String name, String color, int opacity, Shape shape) {
             this.name = name;
             this.color = color;
             this.opacity = opacity;
             this.shape = shape;
         }
+        public void turnOn(){
+            this.status = true;
+        }
+        public void turnOff(){
+            this.status = false;
+        }
+        public void changeColor(String color){
+            this.color = color;
+        }
+        public void changeOpacity(int opacity){
+            this.opacity = opacity;
+        }
     }
 
     public class Shape {
-        public Point point;
+        public List<Point> points;
         public boolean fill;
         public String color;
+
         public Line line;
-        public Shape(){
+
+        public Shape() {
         }
-        public Shape(Point point, boolean fill, String color, Line line) {
-            this.point = point;
+
+        public Shape(List<Point> points, boolean fill, String color, Line line) {
+            this.points = points;
             this.fill = fill;
             this.color = color;
             this.line = line;
@@ -88,6 +133,7 @@ class MouseApplicationTests {
         int x;
         int y;
         int z;
+
         public Point(int x, int y, int z) {
             this.x = x;
             this.y = y;
@@ -116,20 +162,10 @@ class MouseApplicationTests {
             this.shape = shape;
         }
 
-        public void doButtonAction(int x, int y) {
-            position = new Position(x, y);
-            if (type == "Left") {
-                System.out.println("click at " + position.toString());
-            } else if (type == "Right") {
-                System.out.println("open menu at " + position.toString());
-            } else if (type == "Next") {
-                System.out.println("next page");
-            } else if (type == "Back") {
-                System.out.println("back to previous page");
-            } else {
-                System.out.println("Not supported type");
-            }
+        public void action(String action) {
+            System.out.println("Button " + type + action);
         }
+
     }
 
     public class Wheel {
@@ -137,6 +173,7 @@ class MouseApplicationTests {
         public Wheel(Shape shape) {
             this.shape = shape;
         }
+
         public void scroll(int length) {
             if (length < 0) {
                 System.out.println("Scroll up " + length);
@@ -149,10 +186,12 @@ class MouseApplicationTests {
     public class Position {
         public int x;
         public int y;
+
         public Position(int x, int y) {
             this.x = x;
             this.y = y;
         }
+
         @Override
         public String toString() {
             return "position{" +
