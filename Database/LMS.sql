@@ -258,3 +258,15 @@ CREATE TABLE MenteeCourse (
   FOREIGN KEY (mentee_id) REFERENCES User(id),
   FOREIGN KEY (course_id) REFERENCES Course(id)
 );
+
+CREATE TABLE `Online` (
+   user_id INT,
+   online_date DATE,
+   online_time TIME
+);
+CREATE TABLE FavouriteCategory(
+   mentee_id INT,
+   category_id varchar(10), 
+   FOREIGN KEY (category_id) REFERENCES Category(id),
+   FOREIGN KEY (mentee_id) REFERENCES User(id)
+)
