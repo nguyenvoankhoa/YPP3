@@ -15,8 +15,9 @@ import java.util.Objects;
 class MouseApplicationTests {
     Mouse mouse;
     List<TargetObject> objects;
+
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         objects = new ArrayList<>();
         List<Light> lights = new ArrayList<>();
         Light light = new Light("Logitech", "black", 100, null);
@@ -39,20 +40,47 @@ class MouseApplicationTests {
     }
 
     @Test
-    public void testMove(){
+    public void testMove() {
         Position position = new Position(2, 3);
         mouse.move(2, 3);
-        assert(position.equals(mouse.position));
+        assert (position.equals(mouse.position));
     }
+
     @Test
-    public void testAdjustSensitivity(){
+    public void testAdjustSensitivity() {
         int newSensitivity = 100;
         mouse.adjustSensitivity(newSensitivity);
-        assert(mouse.sensitivity == newSensitivity);
+        assert (mouse.sensitivity == newSensitivity);
     }
-    @Test
-    public void testClick(){
 
+    @Test
+    public void testLeftButtonClick() {
+        assert (mouse.invokeButtonClick("Left").equals("Button Left click"));
+    }
+
+    @Test
+    public void testRightButtonClick() {
+        assert (mouse.invokeButtonClick("Right").equals("Button Right click"));
+    }
+
+    @Test
+    public void testBackButtonClick() {
+        assert (mouse.invokeButtonClick("Back").equals("Button Back click"));
+    }
+
+    @Test
+    public void testNextButtonClick() {
+        assert (mouse.invokeButtonClick("Next").equals("Button Next click"));
+    }
+
+    @Test
+    public void testScrollUp() {
+        assert (mouse.wheel.scroll(-100).equals(("Scroll up " + -100)));
+    }
+
+    @Test
+    public void testScrollDown() {
+        assert (mouse.wheel.scroll(100).equals(("Scroll down " + 100)));
     }
 
     public class TargetObject {
@@ -80,6 +108,7 @@ class MouseApplicationTests {
 
         public int sensitivity;
 
+
         public Mouse(List<Light> lights, List<Button> buttons, Wheel wheel, Position position, int sensitivity) {
             this.lights = lights;
             this.buttons = buttons;
@@ -99,6 +128,14 @@ class MouseApplicationTests {
             return sensitivity;
         }
 
+        public String invokeButtonClick(String type) {
+            for (Button btn : buttons) {
+                if (btn.type.equals(type)) {
+                    return btn.click();
+                }
+            }
+            return "Not have this button";
+        }
 
 
     }
@@ -175,32 +212,34 @@ class MouseApplicationTests {
             this.shape = shape;
         }
 
-        public void click() {
+        public String click() {
             System.out.println("Button " + type + " click");
             for (TargetObject targetObject : objects) {
                 if (checkInRange(targetObject.xLeft, targetObject.xRight, targetObject.yTop, targetObject.yBottom)) {
                     System.out.println("Button " + type + " click at object " + targetObject.name);
                 }
             }
+            return "Button " + type + " click";
         }
 
-        public void doubleClick() {
+        public String doubleClick() {
             System.out.println("Button " + type + " double click");
             for (TargetObject targetObject : objects) {
                 if (checkInRange(targetObject.xLeft, targetObject.xRight, targetObject.yTop, targetObject.yBottom)) {
                     System.out.println("Button " + type + " double click at object " + targetObject.name);
                 }
             }
+            return "Button " + type + " double click";
         }
 
-        public void press() {
+        public String press() {
             System.out.println("Button " + type + " press");
-            System.out.println("Button " + type + " double click");
             for (TargetObject targetObject : objects) {
                 if (checkInRange(targetObject.xLeft, targetObject.xRight, targetObject.yTop, targetObject.yBottom)) {
                     System.out.println("Button " + type + " double click at object " + targetObject.name);
                 }
             }
+            return "Button " + type + " press";
         }
 
         public boolean checkInRange(int xLeft, int xRight, int yTop, int yBottom) {
@@ -216,11 +255,11 @@ class MouseApplicationTests {
             this.shape = shape;
         }
 
-        public void scroll(int length) {
+        public String scroll(int length) {
             if (length < 0) {
-                System.out.println("Scroll up " + length);
+                return "Scroll up " + length;
             } else {
-                System.out.println("Scroll down " + length);
+                return "Scroll down " + length;
             }
         }
     }
