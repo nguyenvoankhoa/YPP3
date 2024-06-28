@@ -1,6 +1,7 @@
 package com.mouse;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Menu extends TargetObject {
     public boolean isOpen;
@@ -15,12 +16,8 @@ public class Menu extends TargetObject {
     @Override
     public String doAction() {
         String result = "open menu";
-        if (submenus != null) {
-            result += ", contains submenu:";
-            for (Menu item : submenus) {
-                result += " " + item.name + ",";
-            }
-        }
+        result += (submenus == null) ? "" :
+                ", contains submenu:" + submenus.stream().map(item -> " " + item.name).collect(Collectors.joining(","));
         return result;
     }
 

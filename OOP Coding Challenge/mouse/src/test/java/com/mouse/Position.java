@@ -19,10 +19,8 @@ public class Position {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Position)) return false;
-        Position position = (Position) o;
-        return x == position.x && y == position.y;
+        return (this == o) ? true : (o instanceof Position) && ((Position) o).x == x && ((Position) o).y == y;
     }
+
 
 }

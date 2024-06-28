@@ -50,17 +50,19 @@ class MouseApplicationTests {
     }
 
     @Test
-    public void testChangeLightColor(){
+    public void testChangeLightColor() {
         mouse.light.changeColor("red");
         assert (mouse.light.color.equals("red"));
     }
+
     @Test
-    public void testTurnOffColor(){
+    public void testTurnOffColor() {
         mouse.light.turnOff();
         assert (mouse.light.status == false);
     }
+
     @Test
-    public void testTurnOnColor(){
+    public void testTurnOnColor() {
         mouse.light.turnOn();
         assert (mouse.light.status == true);
     }
@@ -189,7 +191,7 @@ class MouseApplicationTests {
     }
 
     @Test
-    public void testRightOpenMenu(){
+    public void testRightOpenMenu() {
         Menu item1 = new Menu(115, 125, 145, 155, "Show context action", false, null);
         Menu item2 = new Menu(115, 125, 145, 155, "Refactor", false, null);
         List<Menu> menus = new ArrayList<>();
@@ -230,18 +232,14 @@ class MouseApplicationTests {
         }
 
         public String invokeButtonAction(String type, Action action) {
-            TargetObject object = null;
-            for (TargetObject targetObject : objects) {
-                if (checkInRange(targetObject.xLeft, targetObject.xRight, targetObject.yTop, targetObject.yBottom)) {
-                    object = targetObject;
-                }
-            }
-            for (Button btn : buttons) {
-                if (btn.type.equals(type)) {
-                    return btn.action(object, action);
-                }
-            }
-            return "Not have this button";
+            TargetObject object = objects.stream()
+                    .filter(o -> checkInRange(o.xLeft, o.xRight, o.yTop, o.yBottom))
+                    .findFirst()
+                    .orElse(null);
+            return buttons.stream().filter(btn -> btn.type.equals(type))
+                    .findFirst()
+                    .map(btn -> btn.action(object, action))
+                    .orElse("Not have this button");
         }
 
         public boolean checkInRange(int xLeft, int xRight, int yTop, int yBottom) {

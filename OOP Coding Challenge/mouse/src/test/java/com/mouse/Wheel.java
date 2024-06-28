@@ -1,4 +1,5 @@
 package com.mouse;
+
 public class Wheel {
     public Shape shape;
 
@@ -7,10 +8,6 @@ public class Wheel {
     }
 
     public String scroll(int length) {
-        if (length < 0) {
-            return "Scroll up " + length;
-        } else {
-            return "Scroll down " + length;
-        }
+        return length < 0 ? "Scroll up " + length : "Scroll down " + length;
     }
 }

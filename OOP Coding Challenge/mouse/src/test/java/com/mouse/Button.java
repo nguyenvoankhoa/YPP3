@@ -11,10 +11,9 @@ public class Button {
     }
 
     public String action(TargetObject object, Action action) {
-        if (object != null) {
-            return ("Button " + type + " " + action.toString() + " at object " + object.name + ", " + object.doAction());
-        }
-        return "Button " + type + " " + action.toString();
+        return object != null ?
+                ("Button " + type + " " + action.toString() + " at object " + object.name + ", " + object.doAction())
+                : "Button " + type + " " + action.toString();
     }
 
 }
