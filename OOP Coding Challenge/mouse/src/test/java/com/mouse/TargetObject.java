@@ -1,6 +1,6 @@
 package com.mouse;
 
-public class TargetObject implements ITargetObject{
+public class TargetObject{
     int xLeft;
     int xRight;
     int yTop;
@@ -15,7 +15,6 @@ public class TargetObject implements ITargetObject{
         this.name = name;
     }
 
-    @Override
     public String doAction() {
         return  this.name + " is doing something";
     }

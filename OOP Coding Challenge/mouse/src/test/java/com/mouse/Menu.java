@@ -15,10 +15,10 @@ public class Menu extends TargetObject {
     @Override
     public String doAction() {
         String result = "open menu";
-        if (submenus.size() > 0) {
+        if (submenus != null) {
             result += ", contains submenu:";
             for (Menu item : submenus) {
-                result += " " + item.name +",";
+                result += " " + item.name + ",";
             }
         }
         return result;

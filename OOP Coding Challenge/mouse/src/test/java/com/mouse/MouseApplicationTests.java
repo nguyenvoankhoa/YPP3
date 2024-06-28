@@ -18,10 +18,7 @@ class MouseApplicationTests {
     @BeforeEach
     public void setUp() {
         objects = new ArrayList<>();
-
-        List<Light> lights = new ArrayList<>();
-        Light light = new Light("Logitech", "black", 100, null);
-        lights.add(light);
+        Light light = new Light("Logitech", "black", 100, new Shape(), true);
         Wheel wheel = new Wheel(new Shape());
         Point point = new Point(0, 0, 0);
         List<Point> points = new ArrayList<>();
@@ -36,7 +33,7 @@ class MouseApplicationTests {
         buttons.add(next);
         buttons.add(back);
         Position position = new Position(0, 0);
-        mouse = new Mouse(lights, buttons, wheel, position, 50);
+        mouse = new Mouse(light, buttons, wheel, position, 50);
     }
 
     @Test
@@ -50,6 +47,22 @@ class MouseApplicationTests {
         int newSensitivity = 100;
         mouse.adjustSensitivity(newSensitivity);
         assert (mouse.sensitivity == newSensitivity);
+    }
+
+    @Test
+    public void testChangeLightColor(){
+        mouse.light.changeColor("red");
+        assert (mouse.light.color.equals("red"));
+    }
+    @Test
+    public void testTurnOffColor(){
+        mouse.light.turnOff();
+        assert (mouse.light.status == false);
+    }
+    @Test
+    public void testTurnOnColor(){
+        mouse.light.turnOn();
+        assert (mouse.light.status == true);
     }
 
     @Test
@@ -189,7 +202,7 @@ class MouseApplicationTests {
     }
 
     public class Mouse {
-        public List<Light> lights;
+        public Light light;
         public List<Button> buttons;
         public Wheel wheel;
         public Position position;
@@ -197,8 +210,8 @@ class MouseApplicationTests {
         public int sensitivity;
 
 
-        public Mouse(List<Light> lights, List<Button> buttons, Wheel wheel, Position position, int sensitivity) {
-            this.lights = lights;
+        public Mouse(Light light, List<Button> buttons, Wheel wheel, Position position, int sensitivity) {
+            this.light = light;
             this.buttons = buttons;
             this.wheel = wheel;
             this.position = position;
