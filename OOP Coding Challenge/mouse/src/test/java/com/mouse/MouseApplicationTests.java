@@ -42,7 +42,7 @@ class MouseApplicationTests {
     @Test
     public void testMove() {
         mouse.move(2, 3);
-        assert (mouse.position.equals(new Position(2*50, 3*50)));
+        assert (mouse.position.equals(new Position(2 * 50, 3 * 50)));
     }
 
     @Test
@@ -54,35 +54,45 @@ class MouseApplicationTests {
 
     @Test
     public void testLeftButtonClick() {
-        assert (mouse.invokeButtonClick("Left").equals("Button Left click"));
+        assert (mouse.invokeButtonAction("Left", Action.CLICK).equals("Button Left CLICK"));
     }
+
     @Test
-    public void testLeftTargetClick(){
-        TargetObject targetObject = new TargetObject(115, 125, 145, 155, "Icon Google");
+    public void testLeftTargetClick() {
+        TargetObject targetObject = new TargetObject(115, 125, 145, 155, "Google");
         objects.add(targetObject);
-        System.out.println(this.mouse.position.x);
-        assert(mouse.invokeButtonClick("Left").equals("Button Left click at object Icon Google"));
+        mouse.position = new Position(120, 150);
+        assert (mouse.invokeButtonAction("Left", Action.CLICK).equals("Button Left CLICK at object Google, Google is doing something"));
     }
 
     @Test
     public void testRightButtonClick() {
-        assert (mouse.invokeButtonClick("Right").equals("Button Right click"));
+        assert (mouse.invokeButtonAction("Right", Action.CLICK).equals("Button Right CLICK"));
+    }
+
+    @Test
+    public void testRightTargetClick() {
+        TargetObject targetObject = new TargetObject(115, 125, 145, 155, "Google");
+        objects.add(targetObject);
+        mouse.position = new Position(120, 150);
+        assert (mouse.invokeButtonAction("Right", Action.CLICK).equals("Button Right CLICK at object Google, Google is doing something"));
     }
 
     @Test
     public void testBackButtonClick() {
-        assert (mouse.invokeButtonClick("Back").equals("Button Back click"));
+        assert (mouse.invokeButtonAction("Back", Action.CLICK).equals("Button Back CLICK"));
     }
 
     @Test
     public void testNextButtonClick() {
-        assert (mouse.invokeButtonClick("Next").equals("Button Next click"));
+        assert (mouse.invokeButtonAction("Next", Action.CLICK).equals("Button Next CLICK"));
     }
 
     @Test
-    public void testUnsupportedButton(){
-        assert(mouse.invokeButtonClick("abc").equals("Not have this button"));
+    public void testUnsupportedButton() {
+        assert (mouse.invokeButtonAction("abc", Action.CLICK).equals("Not have this button"));
     }
+
     @Test
     public void testScrollUp() {
         assert (mouse.wheel.scroll(-100).equals(("Scroll up " + -100)));
@@ -93,22 +103,90 @@ class MouseApplicationTests {
         assert (mouse.wheel.scroll(100).equals(("Scroll down " + 100)));
     }
 
-    public class TargetObject {
-        int xLeft;
-        int xRight;
-        int yTop;
-        int yBottom;
-        String name;
-
-        public TargetObject(int xLeft, int xRight, int yTop, int yBottom, String name) {
-            this.xLeft = xLeft;
-            this.xRight = xRight;
-            this.yTop = yTop;
-            this.yBottom = yBottom;
-            this.name = name;
-        }
+    @Test
+    public void testLeftButtonDoubleClick() {
+        assert (mouse.invokeButtonAction("Left", Action.DOUBLE_CLICK).equals("Button Left DOUBLE_CLICK"));
     }
 
+    @Test
+    public void testLeftTargetDoubleClick() {
+        TargetObject targetObject = new TargetObject(115, 125, 145, 155, "Google");
+        objects.add(targetObject);
+        mouse.position = new Position(120, 150);
+        assert (mouse.invokeButtonAction("Left", Action.DOUBLE_CLICK).equals("Button Left DOUBLE_CLICK at object Google, Google is doing something"));
+    }
+
+    @Test
+    public void testRightButtonDoubleClick() {
+        assert (mouse.invokeButtonAction("Right", Action.DOUBLE_CLICK).equals("Button Right DOUBLE_CLICK"));
+    }
+
+    @Test
+    public void testRightTargetDoubleClick() {
+        TargetObject targetObject = new TargetObject(115, 125, 145, 155, "Google");
+        objects.add(targetObject);
+        mouse.position = new Position(120, 150);
+        assert (mouse.invokeButtonAction("Right", Action.DOUBLE_CLICK).equals("Button Right DOUBLE_CLICK at object Google, Google is doing something"));
+    }
+
+    @Test
+    public void testBackButtonDoubleClick() {
+        assert (mouse.invokeButtonAction("Back", Action.DOUBLE_CLICK).equals("Button Back DOUBLE_CLICK"));
+    }
+
+    @Test
+    public void testNextButtonDoubleClick() {
+        assert (mouse.invokeButtonAction("Next", Action.DOUBLE_CLICK).equals("Button Next DOUBLE_CLICK"));
+    }
+
+    @Test
+    public void testLeftButtonPress() {
+        assert (mouse.invokeButtonAction("Left", Action.PRESS).equals("Button Left PRESS"));
+    }
+
+    @Test
+    public void testLeftTargetPress() {
+        TargetObject targetObject = new TargetObject(115, 125, 145, 155, "Google");
+        objects.add(targetObject);
+        mouse.position = new Position(120, 150);
+        assert (mouse.invokeButtonAction("Left", Action.PRESS).equals("Button Left PRESS at object Google, Google is doing something"));
+    }
+
+    @Test
+    public void testRightButtonPress() {
+        assert (mouse.invokeButtonAction("Right", Action.PRESS).equals("Button Right PRESS"));
+    }
+
+    @Test
+    public void testRightTargetPress() {
+        TargetObject targetObject = new TargetObject(115, 125, 145, 155, "Google");
+        objects.add(targetObject);
+        mouse.position = new Position(120, 150);
+        assert (mouse.invokeButtonAction("Right", Action.PRESS).equals("Button Right PRESS at object Google, Google is doing something"));
+    }
+
+    @Test
+    public void testBackButtonPress() {
+        assert (mouse.invokeButtonAction("Back", Action.PRESS).equals("Button Back PRESS"));
+    }
+
+    @Test
+    public void testNextButtonPress() {
+        assert (mouse.invokeButtonAction("Next", Action.PRESS).equals("Button Next PRESS"));
+    }
+
+    @Test
+    public void testRightOpenMenu(){
+        Menu item1 = new Menu(115, 125, 145, 155, "Show context action", false, null);
+        Menu item2 = new Menu(115, 125, 145, 155, "Refactor", false, null);
+        List<Menu> menus = new ArrayList<>();
+        menus.add(item1);
+        menus.add(item2);
+        TargetObject targetObject = new Menu(115, 125, 145, 155, "Properties", false, menus);
+        objects.add(targetObject);
+        mouse.position = new Position(120, 150);
+        assert (mouse.invokeButtonAction("Right", Action.CLICK).equals("Button Right CLICK at object Properties, open menu, contains submenu: Show context action, Refactor,"));
+    }
 
     public class Mouse {
         public List<Light> lights;
@@ -138,162 +216,25 @@ class MouseApplicationTests {
             return sensitivity;
         }
 
-        public String invokeButtonClick(String type) {
+        public String invokeButtonAction(String type, Action action) {
+            TargetObject object = null;
             for (TargetObject targetObject : objects) {
                 if (checkInRange(targetObject.xLeft, targetObject.xRight, targetObject.yTop, targetObject.yBottom)) {
-                    return ("Button " + type + " click at object " + targetObject.name);
+                    object = targetObject;
                 }
             }
             for (Button btn : buttons) {
                 if (btn.type.equals(type)) {
-                    return btn.click();
+                    return btn.action(object, action);
                 }
             }
             return "Not have this button";
         }
+
         public boolean checkInRange(int xLeft, int xRight, int yTop, int yBottom) {
-            return position.x >= xLeft && position.x <= xRight && position.y <= yTop && position.y >= yBottom;
+            return position.x >= xLeft && position.x <= xRight && position.y >= yTop && position.y <= yBottom;
         }
 
-
-    }
-
-    public class Light {
-        public String name;
-        public String color;
-        public int opacity;
-        public Shape shape;
-
-        public boolean status;
-
-        public Light(String name, String color, int opacity, Shape shape) {
-            this.name = name;
-            this.color = color;
-            this.opacity = opacity;
-            this.shape = shape;
-        }
-
-        public void turnOn() {
-            this.status = true;
-        }
-
-        public void turnOff() {
-            this.status = false;
-        }
-
-        public void changeColor(String color) {
-            this.color = color;
-        }
-
-        public void changeOpacity(int opacity) {
-            this.opacity = opacity;
-        }
-    }
-
-    public class Shape {
-        public List<Point> points;
-        public boolean fill;
-        public String color;
-
-        public Shape() {
-        }
-
-        public Shape(List<Point> points, boolean fill, String color) {
-            this.points = points;
-            this.fill = fill;
-            this.color = color;
-        }
-    }
-
-    public class Point {
-        int x;
-        int y;
-        int z;
-
-        public Point(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-    }
-
-
-    public class Button {
-        public String type;
-        public Shape shape;
-
-
-        public Button(String type, Shape shape) {
-            this.type = type;
-            this.shape = shape;
-        }
-
-        public String click(TargetObject object) {
-            if(object != null){
-                return ("Button " + type + " click at object " + object.name);
-            }
-            return "Button " + type + " click";
-        }
-
-        public String doubleClick(TargetObject object) {
-            if(object != null){
-                return ("Button " + type + " double click at object " + object.name);
-            }
-            return "Button " + type + " double click";
-        }
-
-        public String press(TargetObject object) {
-            if(object != null){
-                return ("Button " + type + " double click at object " + object.name);
-            }
-            return "Button " + type + " press";
-        }
-
-
-
-    }
-
-    public class Wheel {
-        public Shape shape;
-
-        public Wheel(Shape shape) {
-            this.shape = shape;
-        }
-
-        public String scroll(int length) {
-            if (length < 0) {
-                return "Scroll up " + length;
-            } else {
-                return "Scroll down " + length;
-            }
-        }
-    }
-
-    public class Position {
-        public int x;
-        public int y;
-
-        public Position(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public String toString() {
-            return "position{" +
-                    "x=" + x +
-                    ", y=" + y +
-                    '}';
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Position)) return false;
-            Position position = (Position) o;
-            return x == position.x && y == position.y;
-        }
 
     }
 
