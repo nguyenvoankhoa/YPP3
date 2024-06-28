@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 @SpringBootTest
@@ -19,6 +18,7 @@ class MouseApplicationTests {
     @BeforeEach
     public void setUp() {
         objects = new ArrayList<>();
+
         List<Light> lights = new ArrayList<>();
         Light light = new Light("Logitech", "black", 100, null);
         lights.add(light);
@@ -41,9 +41,8 @@ class MouseApplicationTests {
 
     @Test
     public void testMove() {
-        Position position = new Position(2, 3);
         mouse.move(2, 3);
-        assert (position.equals(mouse.position));
+        assert (mouse.position.equals(new Position(2*50, 3*50)));
     }
 
     @Test
@@ -56,6 +55,13 @@ class MouseApplicationTests {
     @Test
     public void testLeftButtonClick() {
         assert (mouse.invokeButtonClick("Left").equals("Button Left click"));
+    }
+    @Test
+    public void testLeftTargetClick(){
+        TargetObject targetObject = new TargetObject(115, 125, 145, 155, "Icon Google");
+        objects.add(targetObject);
+        System.out.println(this.mouse.position.x);
+        assert(mouse.invokeButtonClick("Left").equals("Button Left click at object Icon Google"));
     }
 
     @Test
@@ -73,6 +79,10 @@ class MouseApplicationTests {
         assert (mouse.invokeButtonClick("Next").equals("Button Next click"));
     }
 
+    @Test
+    public void testUnsupportedButton(){
+        assert(mouse.invokeButtonClick("abc").equals("Not have this button"));
+    }
     @Test
     public void testScrollUp() {
         assert (mouse.wheel.scroll(-100).equals(("Scroll up " + -100)));
@@ -118,8 +128,8 @@ class MouseApplicationTests {
         }
 
         public Position move(int xOffset, int yOffset) {
-            this.position.x += xOffset;
-            this.position.y += yOffset;
+            this.position.x += xOffset * sensitivity;
+            this.position.y += yOffset * sensitivity;
             return this.position;
         }
 
@@ -129,12 +139,20 @@ class MouseApplicationTests {
         }
 
         public String invokeButtonClick(String type) {
+            for (TargetObject targetObject : objects) {
+                if (checkInRange(targetObject.xLeft, targetObject.xRight, targetObject.yTop, targetObject.yBottom)) {
+                    return ("Button " + type + " click at object " + targetObject.name);
+                }
+            }
             for (Button btn : buttons) {
                 if (btn.type.equals(type)) {
                     return btn.click();
                 }
             }
             return "Not have this button";
+        }
+        public boolean checkInRange(int xLeft, int xRight, int yTop, int yBottom) {
+            return position.x >= xLeft && position.x <= xRight && position.y <= yTop && position.y >= yBottom;
         }
 
 
@@ -205,46 +223,34 @@ class MouseApplicationTests {
         public String type;
         public Shape shape;
 
-        public Position position;
 
         public Button(String type, Shape shape) {
             this.type = type;
             this.shape = shape;
         }
 
-        public String click() {
-            System.out.println("Button " + type + " click");
-            for (TargetObject targetObject : objects) {
-                if (checkInRange(targetObject.xLeft, targetObject.xRight, targetObject.yTop, targetObject.yBottom)) {
-                    System.out.println("Button " + type + " click at object " + targetObject.name);
-                }
+        public String click(TargetObject object) {
+            if(object != null){
+                return ("Button " + type + " click at object " + object.name);
             }
             return "Button " + type + " click";
         }
 
-        public String doubleClick() {
-            System.out.println("Button " + type + " double click");
-            for (TargetObject targetObject : objects) {
-                if (checkInRange(targetObject.xLeft, targetObject.xRight, targetObject.yTop, targetObject.yBottom)) {
-                    System.out.println("Button " + type + " double click at object " + targetObject.name);
-                }
+        public String doubleClick(TargetObject object) {
+            if(object != null){
+                return ("Button " + type + " double click at object " + object.name);
             }
             return "Button " + type + " double click";
         }
 
-        public String press() {
-            System.out.println("Button " + type + " press");
-            for (TargetObject targetObject : objects) {
-                if (checkInRange(targetObject.xLeft, targetObject.xRight, targetObject.yTop, targetObject.yBottom)) {
-                    System.out.println("Button " + type + " double click at object " + targetObject.name);
-                }
+        public String press(TargetObject object) {
+            if(object != null){
+                return ("Button " + type + " double click at object " + object.name);
             }
             return "Button " + type + " press";
         }
 
-        public boolean checkInRange(int xLeft, int xRight, int yTop, int yBottom) {
-            return position.x >= xLeft && position.x <= xRight && position.y <= yTop && position.y >= yBottom;
-        }
+
 
     }
 
