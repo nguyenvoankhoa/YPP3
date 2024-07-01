@@ -1,19 +1,12 @@
-package com.mouse;
+import lombok.Builder;
 
+@Builder
 public class Light {
     public String name;
     public String color;
     public int opacity;
     public Shape shape;
     public boolean status;
-
-    public Light(String name, String color, int opacity, Shape shape, boolean status) {
-        this.name = name;
-        this.color = color;
-        this.opacity = opacity;
-        this.shape = shape;
-        this.status = status;
-    }
 
     public void turnOn() {
         this.status = true;

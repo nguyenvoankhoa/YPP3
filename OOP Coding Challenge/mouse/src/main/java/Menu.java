@@ -1,17 +1,12 @@
-package com.mouse;
+import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@SuperBuilder
 public class Menu extends TargetObject {
     public boolean isOpen;
     List<Menu> submenus;
-
-    public Menu(int xLeft, int xRight, int yTop, int yBottom, String name, boolean isOpen, List<Menu> submenus) {
-        super(xLeft, xRight, yTop, yBottom, name);
-        this.isOpen = isOpen;
-        this.submenus = submenus;
-    }
 
     @Override
     public String doAction() {
