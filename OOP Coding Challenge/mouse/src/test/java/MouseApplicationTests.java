@@ -1,4 +1,3 @@
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,7 +7,7 @@ import java.util.List;
 
 
 @SpringBootTest
-class MouseApplicationTests {
+public class MouseApplicationTests {
     Mouse mouse;
     List<TargetObject> objects;
 
@@ -22,10 +21,22 @@ class MouseApplicationTests {
         List<Point> points = new ArrayList<>();
         points.add(point);
         List<Button> buttons = new ArrayList<>();
-        Button left = Button.builder().type("Left").shape(Shape.builder().color("black").build()).build();
-        Button right = Button.builder().type("Right").shape(Shape.builder().color("black").build()).build();
-        Button next = Button.builder().type("Next").shape(Shape.builder().color("black").build()).build();
-        Button back = Button.builder().type("Back").shape(Shape.builder().color("black").build()).build();
+        Button left = Button.builder()
+                .type("Left")
+                .shape(Shape.builder().color("black").build())
+                .build();
+        Button right = Button.builder()
+                .type("Right")
+                .shape(Shape.builder().color("black").build())
+                .build();
+        Button next = Button.builder()
+                .type("Next")
+                .shape(Shape.builder().color("black").build())
+                .build();
+        Button back = Button.builder()
+                .type("Back")
+                .shape(Shape.builder().color("black").build())
+                .build();
         buttons.add(left);
         buttons.add(right);
         buttons.add(next);
@@ -233,19 +244,27 @@ class MouseApplicationTests {
     @Test
     public void testRightOpenMenu() {
         Menu item1 = Menu.builder()
-                        .
-                name("Show context action").xLeft(115).xRight(125).yTop(145).yBottom(155).isOpen(false)
+                .name("Show context action").xLeft(115).xRight(125).yTop(145).yBottom(155).isOpen(false)
                 .build();
-        Menu item2 = Menu.builder().name("Refactor").xLeft(115).xRight(125).yTop(145).yBottom(155).isOpen(false)
+        Menu item2 = Menu.builder()
+                .name("Refactor").xLeft(115).xRight(125).yTop(145).yBottom(155).isOpen(false)
                 .build();
         List<Menu> menus = new ArrayList<>();
         menus.add(item1);
         menus.add(item2);
-        TargetObject targetObject = Menu.builder().
-                new Menu(115, 125, 145, 155, "Properties", false, menus);
+        TargetObject targetObject = Menu.builder()
+                .xLeft(115)
+                .xRight(125)
+                .yTop(145)
+                .yBottom(155)
+                .name("Properties")
+                .isOpen(false)
+                .submenus(menus)
+                .build();
+
         objects.add(targetObject);
         mouse.position = new Position(120, 150);
-        assert (mouse.invokeButtonAction("Right", Action.CLICK).equals("Button Right CLICK at object Properties, open menu, contains submenu: Show context action, Refactor,"));
+        assert (mouse.invokeButtonAction("Right", Action.CLICK, objects).equals("Button Right CLICK at object Properties, open menu, contains submenu: Show context action, Refactor,"));
     }
 
 
