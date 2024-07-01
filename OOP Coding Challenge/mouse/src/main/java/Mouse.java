@@ -1,8 +1,6 @@
-import lombok.Builder;
-
 import java.util.List;
+import java.util.Optional;
 
-@Builder
 public class Mouse {
     public Light light;
     public List<Button> buttons;
@@ -11,9 +9,17 @@ public class Mouse {
 
     public int sensitivity;
 
+    public Mouse(Light light, List<Button> buttons, Wheel wheel, Position position, int sensitivity) {
+        this.light = light;
+        this.buttons = buttons;
+        this.wheel = wheel;
+        this.position = position;
+        this.sensitivity = sensitivity;
+    }
+
     public Position move(int xOffset, int yOffset) {
-        this.position.x += xOffset * sensitivity;
-        this.position.y += yOffset * sensitivity;
+        this.position.setX(position.getX() + xOffset * sensitivity);
+        this.position.setY(position.getY() + yOffset * sensitivity);
         return this.position;
     }
 
@@ -22,21 +28,30 @@ public class Mouse {
         return sensitivity;
     }
 
-    public String invokeButtonAction(String type, Action action, List<TargetObject> objects) {
-        TargetObject object = objects.stream()
-                .filter(o-> o != null)
-                .filter(o -> checkInRange(o.xLeft, o.xRight, o.yTop, o.yBottom))
+    public void invokeButtonAction(String type, Action action, List<TargetObject> objects) {
+        Optional<TargetObject> object = objects.stream()
+                .filter(o -> o != null)
+                .filter(o -> checkInRange(o.getxLeft(), o.getxRight(), o.getyTop(), o.getyBottom()))
+                .findFirst();
+        buttons.stream()
+                .filter(btn -> btn.getType().equals(type))
                 .findFirst()
-                .orElse(null);
-        return buttons.stream().filter(btn -> btn.type.equals(type))
-                .findFirst()
-                .map(btn -> btn.action(object, action))
-                .orElse("Not have this button");
+                .ifPresent(btn -> {
+                    btn.setAction(action);
+                    object.ifPresent(btn::invokeObjectAction);
+                });
     }
+
 
     public boolean checkInRange(int xLeft, int xRight, int yTop, int yBottom) {
-        return position.x >= xLeft && position.x <= xRight && position.y >= yTop && position.y <= yBottom;
+        return position.getX() >= xLeft && position.getX() <= xRight && position.getY() >= yTop && position.getY() <= yBottom;
     }
 
-
+    public Button getButtonByType(String type) {
+        var button = buttons.stream()
+                .filter(btn -> btn.getType().equals(type))
+                .findFirst()
+                .orElse(null);
+        return button;
+    }
 }

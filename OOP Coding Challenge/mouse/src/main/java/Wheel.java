@@ -1,10 +1,15 @@
-import lombok.Builder;
-
-@Builder
 public class Wheel {
-    public Shape shape;
+    private Shape shape;
 
-    public String scroll(int length) {
-        return length < 0 ? "Scroll up " + length : "Scroll down " + length;
+    public Shape getShape() {
+        return shape;
+    }
+
+    public void setShape(Shape shape) {
+        this.shape = shape;
+    }
+
+    public Action scroll(int length) {
+        return length < 0 ? Action.SCROLL_UP : Action.SCROLL_DOWN;
     }
 }

@@ -1,5 +1,7 @@
 public enum Action {
     CLICK,
     DOUBLE_CLICK,
-    PRESS
+    PRESS,
+    SCROLL_UP,
+    SCROLL_DOWN
 }
