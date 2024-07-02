@@ -17,9 +17,12 @@ public class Mouse {
         this.sensitivity = sensitivity;
     }
 
-    public Position move(int xOffset, int yOffset) {
-        this.position.setX(position.getX() + xOffset * sensitivity);
-        this.position.setY(position.getY() + yOffset * sensitivity);
+    public Position move(double displacement, double degree) {
+        double thetaDegree = Math.toRadians(degree);
+        int newX = (int) (position.getX() + displacement * sensitivity * Math.cos(thetaDegree));
+        int newY = (int) (position.getY() + displacement * sensitivity * Math.sin(thetaDegree));
+        this.position.setX(newX);
+        this.position.setY(newY);
         return this.position;
     }
 

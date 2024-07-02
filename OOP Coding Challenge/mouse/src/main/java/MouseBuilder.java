@@ -35,7 +35,7 @@ public class MouseBuilder {
         return this;
     }
 
-    public MouseBuilder addSensity(int sensitivity) {
+    public MouseBuilder addSensitivity(int sensitivity) {
         this.sensitivity = sensitivity;
         return this;
     }

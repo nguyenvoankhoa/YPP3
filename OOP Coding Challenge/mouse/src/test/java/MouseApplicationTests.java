@@ -17,14 +17,16 @@ public class MouseApplicationTests {
                 .addLight("Green")
                 .addPosition(120, 150)
                 .addWheel()
-                .addSensity(100)
+                .addSensitivity(100)
                 .build();
     }
 
     @Test
     public void testMove() {
-        mouse.move(2, 3);
-        assert (mouse.position.equals(new Position(320, 450)));
+        mouse.move(2, 45);
+        int expectedX = (int) (120 + 2 * 100 * Math.cos(Math.toRadians(45)));
+        int expectedY = (int) (150 + 2 * 100 * Math.sin(Math.toRadians(45)));
+        assert (mouse.position.equals(new Position(expectedX, expectedY)));
     }
 
     @Test
@@ -43,13 +45,13 @@ public class MouseApplicationTests {
     @Test
     public void testTurnOffColor() {
         mouse.light.turnOff();
-        assert (mouse.light.status == false);
+        assert (!mouse.light.status);
     }
 
     @Test
     public void testTurnOnColor() {
         mouse.light.turnOn();
-        assert (mouse.light.status == true);
+        assert (mouse.light.status);
     }
 
     @Test
@@ -99,12 +101,12 @@ public class MouseApplicationTests {
 
     @Test
     public void testScrollUp() {
-        assert (mouse.wheel.scroll(-100)).equals(Action.SCROLL_UP);
+        assert (mouse.wheel.scrollUp(100)).equals(Action.SCROLL_UP);
     }
 
     @Test
     public void testScrollDown() {
-        assert (mouse.wheel.scroll(100)).equals(Action.SCROLL_DOWN);
+        assert (mouse.wheel.scrollDown(100)).equals(Action.SCROLL_DOWN);
     }
 
     @Test

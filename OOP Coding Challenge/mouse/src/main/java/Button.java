@@ -4,7 +4,7 @@ public class Button {
     private Action action;
 
     public Button() {
-        Shape shape = new Shape("Black");
+        this.shape = new Shape("Black");
     }
 
     public Button(String type) {
@@ -15,18 +15,6 @@ public class Button {
 
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Shape getShape() {
-        return shape;
-    }
-
-    public void setShape(Shape shape) {
-        this.shape = shape;
     }
 
     public Action getAction() {

@@ -1,15 +1,15 @@
 public class Wheel {
     private Shape shape;
 
-    public Shape getShape() {
-        return shape;
+    public Wheel() {
+        this.shape = new Shape();
     }
 
-    public void setShape(Shape shape) {
-        this.shape = shape;
+    public Action scrollUp(int length) {
+        return Action.SCROLL_UP;
     }
 
-    public Action scroll(int length) {
-        return length < 0 ? Action.SCROLL_UP : Action.SCROLL_DOWN;
+    public Action scrollDown(int length) {
+        return Action.SCROLL_DOWN;
     }
 }

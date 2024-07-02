@@ -12,9 +12,9 @@ public class Position {
         return "position{" + "x=" + x + ", y=" + y + '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return (this == o) ? true : (o instanceof Position) && ((Position) o).x == x && ((Position) o).y == y;
+
+    public boolean equals(Position p) {
+        return this.x == p.getX() && this.y == p.getY();
     }
 
     public int getX() {
