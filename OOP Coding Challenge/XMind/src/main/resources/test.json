@@ -1,0 +1,85 @@
+{
+  "theme": "Bright",
+  "background": "White",
+  "globalFont": "Arial",
+  "zoomLevel": 90,
+  "title": "Xmind Test",
+  "viewType": "SIXTEEN_BY_FOUR",
+  "root": {
+    "id": "7dc3c2c5-b6c4-458a-8461-f11549fdff21",
+    "content": "Root",
+    "color": "Black",
+    "background": "White",
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "children": [
+      {
+        "id": "82abfb57-ab45-44a0-9069-fbd470666542",
+        "content": "Content 1",
+        "color": "Black",
+        "background": "White",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "children": [],
+        "level": 0,
+        "isOpen": true,
+        "shape": "Rectangle",
+        "font": "Arial"
+      },
+      {
+        "id": "0183f349-08d1-43c6-a5c7-0c26829f003c",
+        "content": "Content 2",
+        "color": "Black",
+        "background": "White",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "children": [],
+        "level": 0,
+        "isOpen": true,
+        "shape": "Rectangle",
+        "font": "Arial"
+      },
+      {
+        "id": "a487394f-b834-42cb-84eb-6737ab0978ea",
+        "content": "Content 3",
+        "color": "Black",
+        "background": "White",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "children": [],
+        "level": 0,
+        "isOpen": true,
+        "shape": "Rectangle",
+        "font": "Arial"
+      },
+      {
+        "id": "694c934a-850c-479a-a884-4509c8fabe33",
+        "content": "Content 4",
+        "color": "Black",
+        "background": "White",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "children": [],
+        "level": 0,
+        "isOpen": true,
+        "shape": "Rectangle",
+        "font": "Arial"
+      }
+    ],
+    "level": 0,
+    "isOpen": true,
+    "shape": "Rectangle",
+    "font": "Arial"
+  },
+  "relationships": []
+}

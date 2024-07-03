@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public abstract class Node {
     private String id;
@@ -29,6 +28,7 @@ public abstract class Node {
     }
 
     public Node(String content) {
+        this();
         this.content = content;
     }
 
@@ -149,8 +149,23 @@ public abstract class Node {
         setOpen(true);
     }
 
-    public void removeAll(){
+    public void removeAll() {
         this.children = null;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + id + '\'' +
+                ", content='" + content + '\'' +
+                ", color='" + color + '\'' +
+                ", background='" + background + '\'' +
+                ", position=" + position.toString() +
+                ", children=" + children +
+                ", level=" + level +
+                ", isOpen=" + isOpen +
+                ", shape='" + shape + '\'' +
+                ", font='" + font + '\'' +
+                '}';
+    }
 }

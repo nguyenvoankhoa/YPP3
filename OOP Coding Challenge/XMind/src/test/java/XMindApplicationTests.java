@@ -50,7 +50,7 @@ class XMindApplicationTests {
         Leaf leaf2 = new LeafBuilder().addContent("Leaf 2").addParent(root).build();
         root.addChild(leaf);
         root.addChild(leaf2);
-        leaf.move(leaf2, 10);
+        leaf.move(leaf2);
         assert (leaf.getParent().getId() == leaf2.getId());
     }
 
@@ -68,13 +68,11 @@ class XMindApplicationTests {
 
     @Test
     public void testImport() {
+        String filepath = "src/main/resources/test.json";
+        assert (board.importMindmap(filepath) != null);
 
     }
 
-    @Test
-    public void testExport() {
-
-    }
 
     @Test
     public void testFloatContentMove() {
@@ -98,7 +96,7 @@ class XMindApplicationTests {
 
     @Test
     public void testSave() {
-        String filepath = "D:\\";
+        String filepath = "src/main/resources/test.json";
         assert (board.saveMindmap(board, filepath));
     }
 }
