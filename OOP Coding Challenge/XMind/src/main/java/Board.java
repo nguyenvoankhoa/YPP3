@@ -141,4 +141,18 @@ public class Board {
         return board;
     }
 
+    public void removeRelationship(Relationship relationship) {
+        relationships.stream()
+                .filter(r -> r.getSourceNode().equals(relationship.getSourceNode()) && r.getTargetNode().equals(relationship.getTargetNode()))
+                .findFirst()
+                .ifPresent(r -> {
+                    relationships.remove(r);
+                });
+    }
+
+    public List<Relationship> addRelationship(Node src, Node target){
+        relationships.add(new Relationship(src, target));
+        return this.relationships;
+    }
+
 }

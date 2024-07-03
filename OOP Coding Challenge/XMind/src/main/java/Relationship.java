@@ -15,11 +15,6 @@ public class Relationship {
         this.targetNode = targetNode;
     }
 
-    public void removeRelationship() {
-        this.targetNode = null;
-        this.sourceNode = null;
-    }
-
     public Node getSourceNode() {
         return sourceNode;
     }

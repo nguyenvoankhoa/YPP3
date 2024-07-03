@@ -99,4 +99,23 @@ class XMindApplicationTests {
         String filepath = "src/main/resources/test.json";
         assert (board.saveMindmap(board, filepath));
     }
+
+    @Test
+    public void testRemoveRelationship() {
+        Leaf src = new Leaf("abc");
+        Leaf target = new Leaf("def");
+        board.addRelationship(src, target);
+        Relationship relationship = board.getRelationships().get(0);
+        int relaBefore = board.getRelationships().size();
+        board.removeRelationship(relationship);
+        int relaAfter = board.getRelationships().size();
+        assert (relaBefore - 1 == relaAfter);
+    }
+
+    @Test
+    public void testAddRelatioship() {
+        Leaf src = new Leaf("abc");
+        Leaf target = new Leaf("def");
+        assert (board.addRelationship(src, target).size() > 0);
+    }
 }
