@@ -3,8 +3,7 @@ import java.util.List;
 public class Leaf extends Node {
 
     public Leaf(String content) {
-        super();
-        this.content = content;
+        super(content);
     }
 
     public Leaf(String content, Node parent) {
@@ -22,8 +21,10 @@ public class Leaf extends Node {
         this.parent = parent;
     }
 
-    public void move(Node newParent, Position position) {
-        setPosition(position);
+    public void move(Node newParent, int displacement) {
+        Position newPosition = newParent.getPosition();
+        newPosition.setX(newPosition.getX() + displacement);
+        setPosition(newPosition);
         this.parent.removeChild(this);
         newParent.addChild(this);
         this.parent = newParent;

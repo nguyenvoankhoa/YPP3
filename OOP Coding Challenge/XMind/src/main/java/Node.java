@@ -4,16 +4,18 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public abstract class Node {
-    protected String id;
-    protected String content;
-    protected String color;
-    protected String background;
-    protected Position position;
-    protected List<Node> children;
-    protected int level;
-    protected boolean isOpen;
+    private String id;
+    private String content;
+    private String color;
+    private String background;
+    private Position position;
+    private List<Node> children;
+    private int level;
+    private boolean isOpen;
 
-    protected String font;
+    private String shape;
+
+    private String font;
 
     public Node() {
         this.id = UUID.randomUUID().toString();
@@ -23,6 +25,11 @@ public abstract class Node {
         this.isOpen = true;
         this.font = "Arial";
         this.background = "White";
+        this.shape = "Rectangle";
+    }
+
+    public Node(String content) {
+        this.content = content;
     }
 
     public Node(String content, int level, List<Node> children) {
@@ -30,6 +37,14 @@ public abstract class Node {
         this.content = content;
         this.level = level;
         this.children = children;
+    }
+
+    public String getShape() {
+        return shape;
+    }
+
+    public void setShape(String shape) {
+        this.shape = shape;
     }
 
     public boolean isOpen() {
@@ -117,9 +132,7 @@ public abstract class Node {
     }
 
     public List<Node> removeChild(Node child) {
-        this.children = this.children.stream()
-                .filter(n -> n.id != child.id)
-                .collect(Collectors.toList());
+        this.children.removeIf(n -> n.id == child.id);
         return this.children;
     }
 
@@ -127,7 +140,6 @@ public abstract class Node {
         setContent(content);
         return this;
     }
-
 
     public void collapse() {
         setOpen(false);
@@ -137,5 +149,8 @@ public abstract class Node {
         setOpen(true);
     }
 
+    public void removeAll(){
+        this.children = null;
+    }
 
 }
