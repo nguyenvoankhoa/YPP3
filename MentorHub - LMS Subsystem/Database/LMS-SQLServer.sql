@@ -71,11 +71,11 @@ CREATE TABLE tag (
   name VARCHAR(255)
 );
 
-CREATE TABLE course_tag (
-  course_id INT,
-  tag_id INT,
-  FOREIGN KEY (course_id) REFERENCES course(id),
-  FOREIGN KEY (tag_id) REFERENCES tag(id)
+CREATE TABLE source_tag (
+    source_id INT,
+    source_type_id INT,
+    tag_id INT,
+    PRIMARY KEY (source_id, source_type_id, tag_id)
 );
 
 CREATE TABLE section (
@@ -146,10 +146,15 @@ CREATE TABLE progress (
   FOREIGN KEY (course_id) REFERENCES course(id)
 );
 
+
 CREATE TABLE voucher (
-  id INT PRIMARY KEY IDENTITY(1,1),
-  code VARCHAR(255),
-  discount FLOAT,
+    id INT PRIMARY KEY,
+    code VARCHAR(255),
+    source_id INT,
+    source_type_id INT,
+    discount FLOAT,
+    quantity INT,
+    expire_date DATETIME
 );
 
 CREATE TABLE payment_method (
@@ -299,3 +304,18 @@ CREATE TABLE setting(
     name VARCHAR(255),
     value INT
 )
+
+
+CREATE TABLE event_type (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    event_type_name VARCHAR(255)
+);
+
+CREATE TABLE event_log (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    user_id INT FOREIGN KEY REFERENCES [user](id),
+    source_id INT,
+    source_type_id INT,
+    event_type_id INT FOREIGN KEY REFERENCES event_type(id),
+    event_time DATETIME
+);

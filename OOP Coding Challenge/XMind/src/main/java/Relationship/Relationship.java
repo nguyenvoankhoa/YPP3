@@ -1,3 +1,7 @@
+package Relationship;
+
+import Content.Node;
+
 public class Relationship {
     private Node sourceNode;
     private Node targetNode;

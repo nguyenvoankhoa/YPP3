@@ -1,3 +1,5 @@
+package Content;
+
 public class Position {
     private int x;
     private int y;
@@ -30,7 +32,7 @@ public class Position {
 
     @Override
     public String toString() {
-        return "Position{" +
+        return "Content.Position{" +
                 "x=" + x +
                 ", y=" + y +
                 '}';

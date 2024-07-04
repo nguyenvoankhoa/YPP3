@@ -1,7 +1,15 @@
+import Board.Board;
+import Board.BoardSerializer;
+import Builder.LeafBuilder;
+import Content.FloatContent;
+import Content.Leaf;
+import Content.Node;
+import Content.Position;
+import Relationship.Relationship;
+import Relationship.RelationshipManager;
+import Setting.ViewType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 class XMindApplicationTests {
     Board board;
@@ -9,13 +17,15 @@ class XMindApplicationTests {
 
     @BeforeEach
     public void setUp() {
-        board = new Board("Bright", "White", "Arial", 90, "Xmind Test", ViewType.SIXTEEN_BY_FOUR);
+        BoardSerializer boardSerializer = new BoardSerializer();
+        RelationshipManager relationshipManager = new RelationshipManager();
+        board = new Board("Bright", "White", "Arial", 90, "Xmind Test", ViewType.SIXTEEN_BY_FOUR, boardSerializer, relationshipManager);
         root = board.getRoot();
     }
 
     @Test
     public void testAddChildren() {
-        Leaf leaf = new LeafBuilder().addContent("Leaf 1").addParent(root).build();
+        Leaf leaf = new LeafBuilder().addContent("Node.Node.Leaf 1").addParent(root).build();
         int beforeAddSize = root.getChildren().size();
         root.addChild(leaf);
         int afterAddSize = root.getChildren().size();
@@ -24,7 +34,7 @@ class XMindApplicationTests {
 
     @Test
     public void testRemoveChildren() {
-        Leaf leaf = new LeafBuilder().addContent("Leaf 1").addParent(root).build();
+        Leaf leaf = new LeafBuilder().addContent("Node.Node.Leaf 1").addParent(root).build();
         root.addChild(leaf);
         int beforeRemoveSize = root.getChildren().size();
         root.removeChild(leaf);
@@ -46,8 +56,8 @@ class XMindApplicationTests {
 
     @Test
     public void testMove() {
-        Leaf leaf = new LeafBuilder().addContent("Leaf 1").addParent(root).build();
-        Leaf leaf2 = new LeafBuilder().addContent("Leaf 2").addParent(root).build();
+        Leaf leaf = new LeafBuilder().addContent("Node.Node.Leaf 1").addParent(root).build();
+        Leaf leaf2 = new LeafBuilder().addContent("Node.Node.Leaf 2").addParent(root).build();
         root.addChild(leaf);
         root.addChild(leaf2);
         leaf.move(leaf2);
@@ -69,7 +79,7 @@ class XMindApplicationTests {
     @Test
     public void testImport() {
         String filepath = "src/main/resources/test.json";
-        assert (board.importMindmap(filepath) != null);
+        assert (board.getIBoardSerialize().importMindMap(filepath) != null);
 
     }
 
@@ -97,25 +107,25 @@ class XMindApplicationTests {
     @Test
     public void testSave() {
         String filepath = "src/main/resources/test.json";
-        assert (board.saveMindmap(board, filepath));
+        assert (board.getIBoardSerialize().saveMindMap(board, filepath));
     }
 
     @Test
     public void testRemoveRelationship() {
         Leaf src = new Leaf("abc");
         Leaf target = new Leaf("def");
-        board.addRelationship(src, target);
-        Relationship relationship = board.getRelationships().get(0);
-        int relaBefore = board.getRelationships().size();
-        board.removeRelationship(relationship);
-        int relaAfter = board.getRelationships().size();
+        board.getIRelationshipManager().addRelationship(src, target);
+        Relationship relationship = board.getIRelationshipManager().getRelationships().get(0);
+        int relaBefore = board.getIRelationshipManager().getRelationships().size();
+        board.getIRelationshipManager().removeRelationship(relationship);
+        int relaAfter = board.getIRelationshipManager().getRelationships().size();
         assert (relaBefore - 1 == relaAfter);
     }
 
     @Test
-    public void testAddRelatioship() {
+    public void testAddRelationship() {
         Leaf src = new Leaf("abc");
         Leaf target = new Leaf("def");
-        assert (board.addRelationship(src, target).size() > 0);
+        assert (board.getIRelationshipManager().addRelationship(src, target).size() > 0);
     }
 }

@@ -1,3 +1,9 @@
+package Builder;
+
+import Content.Leaf;
+import Content.Node;
+import Content.Position;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,32 +19,32 @@ public abstract class GenericBuilder<T extends GenericBuilder<T>> {
 
     public T addBackground(String background) {
         this.background = background;
-        return (T) this;
+        return self();
     }
 
     public T addPosition(Position position) {
         this.position = position;
-        return (T) this;
+        return self();
     }
 
     public T addOpen(boolean status) {
         this.isOpen = status;
-        return (T) this;
+        return self();
     }
 
     public T addLevel(int level) {
         this.level = level;
-        return (T) this;
+        return self();
     }
 
     public T addFont(String font) {
         this.font = font;
-        return (T) this;
+        return self();
     }
 
     public T addIsOpen(boolean isOpen) {
         this.isOpen = isOpen;
-        return (T) this;
+        return self();
     }
 
     public T addChildren(String... children) {
@@ -46,18 +52,20 @@ public abstract class GenericBuilder<T extends GenericBuilder<T>> {
             Leaf leaf = new Leaf(str);
             this.children.add(leaf);
         }
-        return (T) this;
+        return self();
     }
 
     public T addContent(String content) {
         this.content = content;
-        return (T) this;
+        return self();
     }
 
     public T addColor(String color) {
         this.color = color;
-        return (T) this;
+        return self();
     }
+
+    protected abstract T self();
 
     public abstract Node build();
 }
