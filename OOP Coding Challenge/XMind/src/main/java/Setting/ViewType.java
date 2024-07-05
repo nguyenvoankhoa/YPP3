@@ -1,4 +1,4 @@
-package Setting;
+package setting;
 
 public enum ViewType {
     SIXTEEN_BY_FOUR("16:4"),

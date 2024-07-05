@@ -1,11 +1,17 @@
-package Board;
+package board;
 
-import Builder.RootBuilder;
-import Content.Root;
-import Relationship.IRelationshipManager;
-import Setting.ViewType;
+import builder.RootBuilder;
+import content.Root;
+import dependency.IBoardSerialize;
+import dependency.IFloatContentManager;
+import dependency.IRelationshipManager;
+import floatcontent.FloatContent;
+import setting.ViewType;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
+@Setter
 public class Board {
     private String theme;
     private String background;
@@ -20,110 +26,29 @@ public class Board {
 
     private IBoardSerialize iBoardSerialize;
 
+    private IFloatContentManager iFloatContentManager;
+
 
     public Board() {
         this.root = new RootBuilder()
+                .addId("Root")
                 .addContent("Node.Root")
                 .addLevel(0)
                 .addColor("Black")
                 .addChildren("Content 1", "Content 2", "Content 3", "Content 4")
                 .build();
-    }
-
-    public Board(String title) {
-        this.root = new RootBuilder().addContent("Node.Root")
-                .addLevel(0)
-                .addColor("Black").build();
-        this.title = title;
+        this.title = "Hello";
         this.theme = "New Theme";
         this.globalFont = "Arial";
         this.background = "White";
         this.zoomLevel = 90;
+        this.viewType = ViewType.THREE_BY_FOUR;
     }
 
-    public Board(String theme, String background, String globalFont, int zoomLevel, String title, ViewType viewType, IBoardSerialize boardSerializer, IRelationshipManager relationshipManager) {
+    public Board(IRelationshipManager iRelationshipManager, IBoardSerialize iBoardSerialize, IFloatContentManager iFloatContentManager) {
         this();
-        this.theme = theme;
-        this.background = background;
-        this.globalFont = globalFont;
-        this.zoomLevel = zoomLevel;
-        this.title = title;
-        this.viewType = viewType;
-        this.iBoardSerialize = boardSerializer;
-        this.iRelationshipManager = relationshipManager;
-    }
-
-    public IRelationshipManager getIRelationshipManager() {
-        return iRelationshipManager;
-    }
-
-    public void setIRelationshipManager(IRelationshipManager iRelationshipManager) {
         this.iRelationshipManager = iRelationshipManager;
-    }
-
-    public String getTheme() {
-        return theme;
-    }
-
-    public void setTheme(String theme) {
-        this.theme = theme;
-    }
-
-    public String getBackground() {
-        return background;
-    }
-
-    public void setBackground(String background) {
-        this.background = background;
-    }
-
-    public String getGlobalFont() {
-        return globalFont;
-    }
-
-    public void setGlobalFont(String globalFont) {
-        this.globalFont = globalFont;
-    }
-
-    public int getZoomLevel() {
-        return zoomLevel;
-    }
-
-    public void setZoomLevel(int zoomLevel) {
-        this.zoomLevel = zoomLevel;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public ViewType getViewType() {
-        return viewType;
-    }
-
-    public void setViewType(ViewType viewType) {
-        this.viewType = viewType;
-    }
-
-    public Root getRoot() {
-        return root;
-    }
-
-    public void setRoot(Root root) {
-        this.root = root;
-    }
-
-    public IBoardSerialize getIBoardSerialize() {
-        return iBoardSerialize;
-    }
-
-    public void setIBoardSerialize(IBoardSerialize iBoardSerialize) {
         this.iBoardSerialize = iBoardSerialize;
+        this.iFloatContentManager = iFloatContentManager;
     }
-
-
 }

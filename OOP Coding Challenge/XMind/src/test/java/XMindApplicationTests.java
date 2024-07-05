@@ -1,120 +1,121 @@
-import Board.Board;
-import Board.BoardSerializer;
-import Builder.LeafBuilder;
-import Content.FloatContent;
-import Content.Leaf;
-import Content.Node;
-import Content.Position;
-import Relationship.Relationship;
-import Relationship.RelationshipManager;
-import Setting.ViewType;
+import board.Board;
+import board.BoardSerializer;
+import builder.LeafBuilder;
+import dependency.IBoardSerialize;
+import dependency.IRelationshipManager;
+import floatcontent.FloatContent;
+import content.Leaf;
+import content.Position;
+import content.Root;
+import floatcontent.FloatContentManager;
+import dependency.IFloatContentManager;
+import relationship.Relationship;
+import relationship.RelationshipManager;
+import setting.Structure;
+import setting.ViewType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class XMindApplicationTests {
     Board board;
-    Node root;
+    Root root;
 
     @BeforeEach
     public void setUp() {
-        BoardSerializer boardSerializer = new BoardSerializer();
-        RelationshipManager relationshipManager = new RelationshipManager();
-        board = new Board("Bright", "White", "Arial", 90, "Xmind Test", ViewType.SIXTEEN_BY_FOUR, boardSerializer, relationshipManager);
+        IBoardSerialize boardSerializer = new BoardSerializer();
+        IRelationshipManager relationshipManager = new RelationshipManager();
+        IFloatContentManager floatContentManager = new FloatContentManager();
+        board = new Board(relationshipManager, boardSerializer, floatContentManager);
         root = board.getRoot();
     }
 
     @Test
-    public void testAddChildren() {
-        Leaf leaf = new LeafBuilder().addContent("Node.Node.Leaf 1").addParent(root).build();
+    void testAddChildren() {
+        Leaf leaf = new LeafBuilder().addContent("Leaf 1").addParent(root).build();
         int beforeAddSize = root.getChildren().size();
         root.addChild(leaf);
         int afterAddSize = root.getChildren().size();
-        assert (beforeAddSize + 1 == afterAddSize);
+        assertEquals(beforeAddSize + 1, afterAddSize);
     }
 
     @Test
-    public void testRemoveChildren() {
-        Leaf leaf = new LeafBuilder().addContent("Node.Node.Leaf 1").addParent(root).build();
+    void testRemoveChildren() {
+        Leaf leaf = new LeafBuilder().addId("abc").addContent("Leaf 1").addParent(root).build();
         root.addChild(leaf);
         int beforeRemoveSize = root.getChildren().size();
-        root.removeChild(leaf);
+        root.removeChild(leaf.getId());
         int afterRemoveSize = root.getChildren().size();
-        assert (beforeRemoveSize - 1 == afterRemoveSize);
+        assertEquals(beforeRemoveSize - 1, afterRemoveSize);
     }
 
     @Test
-    public void testCollapse() {
+    void testCollapse() {
         root.collapse();
-        assert (!root.isOpen());
+        assertEquals(root.isOpen(), false);
     }
 
     @Test
-    public void testExpand() {
+    void testExpand() {
         root.expand();
-        assert (root.isOpen());
+        assertEquals(root.isOpen(), true);
     }
 
     @Test
-    public void testMove() {
-        Leaf leaf = new LeafBuilder().addContent("Node.Node.Leaf 1").addParent(root).build();
-        Leaf leaf2 = new LeafBuilder().addContent("Node.Node.Leaf 2").addParent(root).build();
+    void testLeafMove() {
+        Leaf leaf = new LeafBuilder().addId("abc").addContent("Leaf 1").addParent(root).build();
+        Leaf leaf1 = new LeafBuilder().addPosition(new Position(4, 5)).addId("def").addContent("Leaf 2").addParent(root).build();
         root.addChild(leaf);
-        root.addChild(leaf2);
-        leaf.move(leaf2);
-        assert (leaf.getParent().getId() == leaf2.getId());
+        root.addChild(leaf1);
+        leaf.move(new Position(5, 6), leaf.getId(), root, board.getIFloatContentManager());
+        assertEquals(leaf.getParent().getId(), (leaf1.getId()));
     }
 
     @Test
-    public void testEditContent() {
-        root.editContent("New Content");
+    void testFloatContentMove(){
+        FloatContent floatContent = new FloatContent("1", "Content 1");
+        floatContent.setPosition(new Position(2, 3));
+        board.getIFloatContentManager().addContent(floatContent);
+        Position newPosition = new Position(100, 200);
+        floatContent.move(newPosition, "1", root);
+        assertEquals(floatContent.getPosition(), newPosition);
+
+    }
+
+    @Test
+    void testEditContent() {
+        root.setContent("New Content");
         assert (root.getContent().equals("New Content"));
     }
 
     @Test
-    public void testRemoveAll() {
+    void testRemoveAll() {
         root.removeAll();
-        assert (root.getChildren() == null);
-    }
-
-    @Test
-    public void testImport() {
-        String filepath = "src/main/resources/test.json";
-        assert (board.getIBoardSerialize().importMindMap(filepath) != null);
-
+        assertEquals(root.getChildren(), null);
     }
 
 
     @Test
-    public void testFloatContentMove() {
-        Position position = new Position(3, 4);
-        FloatContent floatContent = new FloatContent();
-        floatContent.move(position);
-        assert (floatContent.getPosition().getX() == position.getX() && floatContent.getPosition().getY() == position.getY());
-    }
-
-    @Test
-    public void testAdjustZoomLevel() {
+    void testAdjustZoomLevel() {
         board.setZoomLevel(100);
         assert (board.getZoomLevel() == 100);
     }
 
     @Test
-    public void testAdjustViewport() {
+    void testAdjustViewport() {
         board.setViewType(ViewType.THREE_BY_FOUR);
-        assert (board.getViewType().equals(ViewType.THREE_BY_FOUR));
+        assertEquals(board.getViewType(), ViewType.THREE_BY_FOUR);
     }
 
-    @Test
-    public void testSave() {
-        String filepath = "src/main/resources/test.json";
-        assert (board.getIBoardSerialize().saveMindMap(board, filepath));
-    }
 
     @Test
-    public void testRemoveRelationship() {
-        Leaf src = new Leaf("abc");
-        Leaf target = new Leaf("def");
-        board.getIRelationshipManager().addRelationship(src, target);
+    void testRemoveRelationship() {
+        Leaf src = new Leaf("abc", "Node 1");
+        Leaf target = new Leaf("def", "Node 2");
+        root.addChild(src);
+        root.addChild(target);
+        board.getIRelationshipManager().addRelationship("abc", "def");
         Relationship relationship = board.getIRelationshipManager().getRelationships().get(0);
         int relaBefore = board.getIRelationshipManager().getRelationships().size();
         board.getIRelationshipManager().removeRelationship(relationship);
@@ -123,9 +124,46 @@ class XMindApplicationTests {
     }
 
     @Test
-    public void testAddRelationship() {
-        Leaf src = new Leaf("abc");
-        Leaf target = new Leaf("def");
-        assert (board.getIRelationshipManager().addRelationship(src, target).size() > 0);
+    void testAddRelationship() {
+        Leaf src = new Leaf("abc", "Node 1");
+        Leaf target = new Leaf("def", "Node 2");
+        root.addChild(src);
+        root.addChild(target);
+        assert (board.getIRelationshipManager().addRelationship("abc", "def").size() > 0);
     }
+
+    @Test
+    void testStructure() {
+        root.setStructure(Structure.FISH_BONE);
+        assertEquals(root.getStructure(), Structure.FISH_BONE);
+    }
+
+    @Test
+    void testAddFloatContent() {
+        FloatContent floatContent = new FloatContent("abc", "Content 1");
+        board.getIFloatContentManager().addContent(floatContent);
+        assertEquals(board.getIFloatContentManager().getFloatContentList().size(), 1);
+    }
+
+    @Test
+    void testRemoveFloatContent() {
+        FloatContent floatContent = new FloatContent("abc", "Content 1");
+        board.getIFloatContentManager().addContent(floatContent);
+        board.getIFloatContentManager().removeContent("abc");
+        assertEquals(board.getIFloatContentManager().getFloatContentList().size(), 0);
+    }
+
+    @Test
+    void testSave() {
+        board.getIRelationshipManager().addRelationship("abc", "def");
+        String filepath = "src/main/resources/test.json";
+        assert (board.getIBoardSerialize().saveMindMap(board, filepath));
+    }
+
+    @Test
+    void testImport() {
+        String filepath = "src/main/resources/test.json";
+        assert (board.getIBoardSerialize().importMindMap(filepath) != null);
+    }
+
 }

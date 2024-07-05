@@ -1,4 +1,6 @@
-package Board;
+package dependency;
+
+import board.Board;
 
 public interface IBoardSerialize {
     boolean saveMindMap(Board board, String filepath);

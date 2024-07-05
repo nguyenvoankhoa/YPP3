@@ -1,7 +1,7 @@
-package Builder;
+package builder;
 
-import Content.Leaf;
-import Content.Node;
+import content.Leaf;
+import content.Node;
 
 public class LeafBuilder extends GenericBuilder<LeafBuilder> {
     private Node parent;
@@ -18,7 +18,7 @@ public class LeafBuilder extends GenericBuilder<LeafBuilder> {
 
     @Override
     public Leaf build() {
-        return new Leaf(content, parent);
+        return new Leaf(id, content, children, position, parent);
     }
 
 

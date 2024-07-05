@@ -1,25 +1,29 @@
-package Content;
+package content;
+
+import setting.Structure;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
-public abstract class Node {
+@Getter
+@Setter
+public class Node {
     private String id;
     private String content;
     private String color;
     private String background;
     private Position position;
     private List<Node> children;
-    private int level;
     private boolean isOpen;
-
     private String shape;
-
     private String font;
 
+    private Structure structure;
+
     public Node() {
-        this.id = UUID.randomUUID().toString();
         this.color = "Black";
         this.position = new Position();
         this.children = new ArrayList<>();
@@ -27,120 +31,45 @@ public abstract class Node {
         this.font = "Arial";
         this.background = "White";
         this.shape = "Rectangle";
+        this.structure = Structure.FISH_BONE;
     }
 
-    public Node(String content) {
+    public Node(String id, String content) {
         this();
+        this.id = id;
         this.content = content;
     }
 
-    public Node(String content, int level, List<Node> children) {
-        this();
-        this.content = content;
-        this.level = level;
+    public Node(String id, String content, List<Node> children) {
+        this(id, content);
         this.children = children;
     }
 
-    public String getShape() {
-        return shape;
-    }
-
-    public void setShape(String shape) {
-        this.shape = shape;
-    }
-
-    public boolean isOpen() {
-        return isOpen;
-    }
-
-    public void setOpen(boolean open) {
-        isOpen = open;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getFont() {
-        return font;
-    }
-
-    public void setFont(String font) {
-        this.font = font;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getBackground() {
-        return background;
-    }
-
-    public void setBackground(String background) {
-        this.background = background;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
+    public Node(String id, String content, List<Node> children, Position position) {
+        this(id, content);
+        this.children = children;
         this.position = position;
     }
 
-    public List<Node> getChildren() {
-        return children;
-    }
 
-    public void setChildren(List<Node> children) {
-        this.children = children;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public void setChildLevel() {
-        for (Node child : this.children) {
-            child.level = getLevel() + 1;
-        }
+    public void setStructure(Structure structure) {
+        this.structure = structure;
+        Optional.ofNullable(children)
+                .ifPresent(nodes -> nodes.forEach(node -> node.setStructure(structure)));
     }
 
     public List<Node> addChild(Node child) {
-        this.children.add(child);
-        setChildLevel();
-        return this.children;
+        Optional.of(child)
+                .filter(c -> c instanceof Leaf)
+                .map(c -> (Leaf) c)
+                .ifPresent(leaf -> leaf.setParent(this));
+        children.add(child);
+        return children;
     }
 
-    public List<Node> removeChild(Node child) {
-        this.children.removeIf(n -> n.id == child.id);
+    public List<Node> removeChild(String childId) {
+        this.children.removeIf(n -> n.id.equals(childId));
         return this.children;
-    }
-
-    public Node editContent(String content) {
-        setContent(content);
-        return this;
     }
 
     public void collapse() {
@@ -151,23 +80,29 @@ public abstract class Node {
         setOpen(true);
     }
 
-    public void removeAll() {
-        this.children = null;
+    public Node traversal(String id) {
+        return getChildren().stream().filter(node -> node.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    public Node findChild(String id) {
+        return java.util.Optional.of(this)
+                .filter(node -> node.getId().equals(id))
+                .orElseGet(() -> traversal(id));
     }
 
     @Override
     public String toString() {
-        return "{" +
+        return "Node{" +
                 "id='" + id + '\'' +
                 ", content='" + content + '\'' +
                 ", color='" + color + '\'' +
                 ", background='" + background + '\'' +
-                ", position=" + position.toString() +
+                ", position=" + position +
                 ", children=" + children +
-                ", level=" + level +
                 ", isOpen=" + isOpen +
                 ", shape='" + shape + '\'' +
                 ", font='" + font + '\'' +
+                ", structure=" + structure +
                 '}';
     }
 }

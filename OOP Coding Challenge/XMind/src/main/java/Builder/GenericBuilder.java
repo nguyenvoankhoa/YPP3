@@ -1,13 +1,16 @@
-package Builder;
+package builder;
 
-import Content.Leaf;
-import Content.Node;
-import Content.Position;
+import content.Leaf;
+import content.Node;
+import content.Position;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class GenericBuilder<T extends GenericBuilder<T>> {
+    protected String id;
+
     protected String content;
     protected String color;
     protected String background;
@@ -16,6 +19,11 @@ public abstract class GenericBuilder<T extends GenericBuilder<T>> {
     protected int level;
     protected boolean isOpen;
     protected String font;
+
+    public T addId(String id) {
+        this.id = id;
+        return self();
+    }
 
     public T addBackground(String background) {
         this.background = background;
@@ -49,7 +57,7 @@ public abstract class GenericBuilder<T extends GenericBuilder<T>> {
 
     public T addChildren(String... children) {
         for (String str : children) {
-            Leaf leaf = new Leaf(str);
+            Leaf leaf = new Leaf(UUID.randomUUID().toString(), str);
             this.children.add(leaf);
         }
         return self();

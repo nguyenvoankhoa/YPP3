@@ -1,10 +1,8 @@
-package Relationship;
-
-import Content.Node;
+package relationship;
 
 public class Relationship {
-    private Node sourceNode;
-    private Node targetNode;
+    private String sourceNode;
+    private String targetNode;
     private String style;
     private String color;
 
@@ -13,25 +11,25 @@ public class Relationship {
         this.color = "Black";
     }
 
-    public Relationship(Node sourceNode, Node targetNode) {
+    public Relationship(String sourceNode, String targetNode) {
         this();
         this.sourceNode = sourceNode;
         this.targetNode = targetNode;
     }
 
-    public Node getSourceNode() {
+    public String getSourceNode() {
         return sourceNode;
     }
 
-    public void setSourceNode(Node sourceNode) {
+    public void setSourceNode(String sourceNode) {
         this.sourceNode = sourceNode;
     }
 
-    public Node getTargetNode() {
+    public String getTargetNode() {
         return targetNode;
     }
 
-    public void setTargetNode(Node targetNode) {
+    public void setTargetNode(String targetNode) {
         this.targetNode = targetNode;
     }
 

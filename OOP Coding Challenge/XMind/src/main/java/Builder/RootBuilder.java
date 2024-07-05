@@ -1,6 +1,6 @@
-package Builder;
+package builder;
 
-import Content.Root;
+import content.Root;
 
 public class RootBuilder extends GenericBuilder<RootBuilder> {
     @Override
@@ -9,6 +9,6 @@ public class RootBuilder extends GenericBuilder<RootBuilder> {
     }
 
     public Root build() {
-        return new Root(content, level, children);
+        return new Root(id, content, children);
     }
 }
