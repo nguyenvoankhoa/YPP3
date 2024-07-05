@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Getter
@@ -60,7 +61,7 @@ public class Node {
 
     public List<Node> addChild(Node child) {
         Optional.of(child)
-                .filter(c -> c instanceof Leaf)
+                .filter(Leaf.class::isInstance)
                 .map(c -> (Leaf) c)
                 .ifPresent(leaf -> leaf.setParent(this));
         children.add(child);
@@ -80,14 +81,14 @@ public class Node {
         setOpen(true);
     }
 
-    public Node traversal(String id) {
-        return getChildren().stream().filter(node -> node.getId().equals(id)).findFirst().orElse(null);
-    }
-
-    public Node findChild(String id) {
-        return java.util.Optional.of(this)
-                .filter(node -> node.getId().equals(id))
-                .orElseGet(() -> traversal(id));
+    public Node findById(String id) {
+        return Optional.of(this)
+                .filter(node -> getId().equals(id))
+                .orElseGet(() -> getChildren().stream()
+                        .map(node -> node.findById(id))
+                        .filter(Objects::nonNull)
+                        .findFirst()
+                        .orElse(null));
     }
 
     @Override

@@ -89,7 +89,7 @@ INSERT INTO Course (name, category_id, price, description, created_at, mentor_id
 ('Introduction to SQL', 1, 49.99, 'Learn SQL for database management and data analysis.', CURRENT_TIMESTAMP, 5, 70),
 ('Web Accessibility', 2, 79.99, 'Best practices for creating accessible web designs.', CURRENT_TIMESTAMP, 6, 80);
 
-INSERT INTO source_tag (source_id, source_type_id, tag_id) VALUES
+INSERT INTO sourcetag (source_id, source_type_id, tag_id) VALUES
 (1, 3, 4),
 (2, 3, 2),
 (2, 3, 11),
@@ -498,7 +498,7 @@ INSERT INTO Lesson (section_id, title, transcript, summary, asset_id) VALUES
 (30, 'Accessibility Basics', 'Introduction to web accessibility.', 'Understanding web accessibility basics.', 99),
 (30, 'Advanced Accessibility', 'Overview of advanced web accessibility techniques.', 'Basics of advanced web accessibility.', 100);
 
-INSERT INTO resource (asset_id, lesson_id) VALUES
+INSERT INTO Resource (asset_id, lesson_id) VALUES
 (1, 1),
 (2, 1),
 (3, 2),
@@ -793,7 +793,7 @@ INSERT INTO review (mentee_id, source_id, rating_star, content, review_at, sourc
 (15, 39, 4, 'UX design course enhanced my design skills.', CURRENT_TIMESTAMP, 1),
 (16, 40, 5, 'React course was excellent, learned a lot about frontend development.', CURRENT_TIMESTAMP, 1);
 
-INSERT INTO mentee_save_course (course_id, mentee_id) VALUES
+INSERT INTO menteeSaveCourse (course_id, mentee_id) VALUES
 (1, 7),
 (2, 8),
 (3, 13),
@@ -805,7 +805,7 @@ INSERT INTO mentee_save_course (course_id, mentee_id) VALUES
 (9, 9),
 (10, 10);
 
-INSERT INTO source_image (source_id, asset_id, source_type_id) VALUES
+INSERT INTO sourceimage (source_id, asset_id, source_type_id) VALUES
 (1, 101, 1),
 (2, 102, 1),
 (3, 103, 1),
@@ -837,21 +837,21 @@ INSERT INTO source_image (source_id, asset_id, source_type_id) VALUES
 (29, 129, 1),
 (30, 130, 1);
 
-INSERT INTO payment_method (method) VALUES
+INSERT INTO paymentmethod (method) VALUES
 ('Credit Card'),
 ('Debit Card'),
 ('PayPal'),
 ('Bank Transfer'),
 ('Cryptocurrency');
 
-INSERT INTO voucher (id, code, source_id, source_type_id, discount, quantity, expire_date) VALUES
-(1, 'DISCOUNT10', 1, 3, 10.0, 100, '2024-12-31 23:59:59'),
-(2, 'SAVE20', 2, 3, 20.0, 50, '2024-11-30 23:59:59'),
-(3, 'OFFER30', 3, 3, 30.0, 25, '2024-10-31 23:59:59'),
-(4, 'PROMO15', 4, 3, 15.0, 200, '2024-09-30 23:59:59'),
-(5, 'DEAL25', 5, 2, 25.0, 75, '2024-08-31 23:59:59');
+INSERT INTO voucher (code, source_id, source_type_id, discount, quantity, expire_date) VALUES
+('DISCOUNT10', 1, 3, 10.0, 100, '2024-12-31 23:59:59'),
+('SAVE20', 2, 3, 20.0, 50, '2024-11-30 23:59:59'),
+('OFFER30', 3, 3, 30.0, 25, '2024-10-31 23:59:59'),
+('PROMO15', 4, 3, 15.0, 200, '2024-09-30 23:59:59'),
+('DEAL25', 5, 2, 25.0, 75, '2024-08-31 23:59:59');
 
-INSERT INTO user_payment_info (user_id, name_on_card, card_number, expiry_date, payment_method_id) VALUES
+INSERT INTO UserPaymentInfo (user_id, name_on_card, card_number, expiry_date, payment_method_id) VALUES
 (11, 'John Doe', '4111111111111111', '2025-12-31 00:00:00', 1),
 (12, 'Jane Smith', '4222222222222222', '2024-11-30 00:00:00', 2),
 (13, 'Michael Johnson', '4333333333333333', '2026-10-31 00:00:00', 3),
@@ -875,7 +875,7 @@ INSERT INTO [order] (user_id, user_payment_id, status, created_at) VALUES
 (9, 9, 1, CURRENT_TIMESTAMP),
 (10, 10, 2, CURRENT_TIMESTAMP);
 
-INSERT INTO order_detail (order_id, price, source_id, source_type) VALUES
+INSERT INTO OrderDetail (order_id, price, source_id, source_type) VALUES
 (1, 49.99, 1, 1),
 (1, 29.99, 2, 1),
 (1, 19.99, 3, 1),
@@ -919,7 +919,7 @@ INSERT INTO quiz (name, summary, attempts_allowed, passing_grade, duration, sect
 ('Marketing Strategies', 'Effective marketing strategies.', 3, 70, '01:10:00', 3),
 ('Nutrition and Wellness', 'Nutritional advice for better health.', 5, 85, '00:25:00', 4);
 
-INSERT INTO question_type (type) VALUES
+INSERT INTO QuestionType (type) VALUES
 ('Multiple Choice'),
 ('True/False');
 
@@ -986,7 +986,7 @@ INSERT INTO Answer (question_id, content, asset_id, is_correct) VALUES
 (20, 'Proteins for growth and repair, Carbohydrates for energy', NULL, 1),
 (20, 'Vitamins for energy, Carbohydrates for muscle building', NULL, 0);
 
-INSERT INTO quiz_result (mentee_id, quiz_id, date, mark, result) VALUES
+INSERT INTO QuizResult (mentee_id, quiz_id, date, mark, result) VALUES
 (11, 1, GETDATE(), 90.0, 1),
 (12, 2, GETDATE(), 80.0, 1),
 (13, 3, GETDATE(), 70.0, 1),
@@ -998,7 +998,7 @@ INSERT INTO quiz_result (mentee_id, quiz_id, date, mark, result) VALUES
 (9, 9, GETDATE(), 60.0, 0),
 (10, 10, GETDATE(), 50.0, 0);
 
-INSERT INTO mentee_question (mentee_id, question_id, earned_marks) VALUES
+INSERT INTO MenteeQuestion (mentee_id, question_id, earned_marks) VALUES
 (11, 1, 4.5),
 (11, 2, 9.5),
 (11, 3, 5.0),
@@ -1020,7 +1020,7 @@ INSERT INTO mentee_question (mentee_id, question_id, earned_marks) VALUES
 (15, 11, 5.0),
 (15, 12, 10.0);
 
-INSERT INTO learning_path (title, description, mentor_id, created_at, updated_at) VALUES
+INSERT INTO LearningPath(title, description, mentor_id, created_at, updated_at) VALUES
 ('Introduction to Information Technology', 'Learn the basics of Information Technology.', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('UI/UX Design Fundamentals', 'Discover the principles of User Interface and User Experience design.', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Digital Marketing Essentials', 'Understand core concepts and strategies in digital marketing.', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -1032,7 +1032,7 @@ INSERT INTO learning_path (title, description, mentor_id, created_at, updated_at
 ('Creative UI/UX Approaches', 'Explore creative approaches in UI/UX design.', 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Fitness and Nutrition for Life', 'Discover the importance of fitness and nutrition.', 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO course_learning_path (learning_path_id, course_id) VALUES
+INSERT INTO CourseLearningPath(learning_path_id, course_id) VALUES
 (1, 1),
 (1, 2),
 (2, 2),
@@ -1054,7 +1054,7 @@ INSERT INTO course_learning_path (learning_path_id, course_id) VALUES
 (10, 5),
 (10, 8);
 
-INSERT INTO learning_path_progress (learning_path_id, mentee_id, progress) VALUES
+INSERT INTO learningPathProgress (learning_path_id, mentee_id, progress) VALUES
 (1, 11, 0.1),
 (2, 12, 0.2),
 (3, 13, 0.3),
@@ -1066,7 +1066,7 @@ INSERT INTO learning_path_progress (learning_path_id, mentee_id, progress) VALUE
 (9, 9, 0.9),
 (10, 10, 1.0);
 
-INSERT INTO mentee_course (mentee_id, course_id, progress, enroll_at, cert_id, issued_on, expiry_at) VALUES
+INSERT INTO menteeCourse (mentee_id, course_id, progress, enroll_at, cert_id, issued_on, expiry_at) VALUES
 (7, 1, 50, '2024-06-26 18:32:01', 1, '2023-02-28', '2024-02-28'),
 (7, 2, 70, '2024-06-27 18:32:01', 2, '2023-03-15', '2024-03-15'),
 (8, 3, 30, '2024-06-28 18:32:01', NULL, NULL, NULL),
@@ -1110,7 +1110,7 @@ INSERT INTO mentee_course (mentee_id, course_id, progress, enroll_at, cert_id, i
 (10, 1, 65, '2024-06-25 18:32:01', 37, '2024-07-01', '2025-07-01'),
 (10, 2, 92, '2024-06-25 18:32:01', 38, '2024-07-15', '2025-07-15');
 
-INSERT INTO [user_online] (user_id, online_date, online_time) VALUES
+INSERT INTO [userOnline] (user_id, online_date, online_time) VALUES
 (7, '2023-06-01', '01:00:00'),
 (7, '2023-06-01', '00:30:00'), 
 (7, '2023-06-01', '00:45:00'),  
@@ -1133,7 +1133,7 @@ INSERT INTO [user_online] (user_id, online_date, online_time) VALUES
 (15, '2023-06-01', '01:15:00'),  
 (15, '2023-06-01', '00:45:00');
 
-INSERT INTO favourite_category (mentee_id, category_id) VALUES
+INSERT INTO favouriteCategory (mentee_id, category_id) VALUES
 (7, 1),
 (7, 2),
 (7, 3),
@@ -1160,7 +1160,7 @@ INSERT INTO setting (type, name, value) VALUES
 ('Role', 'Mentor', 2),
 ('Role', 'Admin', 3);
 
-INSERT INTO event_type (event_type_name) VALUES
+INSERT INTO eventType (event_type_name) VALUES
 ('Page View'),
 ('Add to Cart'),
 ('Purchase'),
@@ -1169,7 +1169,7 @@ INSERT INTO event_type (event_type_name) VALUES
 ('View Category');
 
 
-INSERT INTO event_log (user_id, source_id, source_type_id, event_type_id, event_time) VALUES
+INSERT INTO eventLog (user_id, source_id, source_type_id, event_type_id, event_time) VALUES
 (1, 1, 1, 1, '2024-03-02 00:00:00'),
 (1, 1, 1, 2, '2024-03-03 00:00:00'),
 (1, 3, 1, 5, '2024-06-06 00:00:00'),

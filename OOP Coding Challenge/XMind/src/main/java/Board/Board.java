@@ -3,9 +3,7 @@ package board;
 import builder.RootBuilder;
 import content.Root;
 import dependency.IBoardSerialize;
-import dependency.IFloatContentManager;
 import dependency.IRelationshipManager;
-import floatcontent.FloatContent;
 import setting.ViewType;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,15 +17,9 @@ public class Board {
     private int zoomLevel;
     private String title;
     private ViewType viewType;
-
     private Root root;
-
     private IRelationshipManager iRelationshipManager;
-
     private IBoardSerialize iBoardSerialize;
-
-    private IFloatContentManager iFloatContentManager;
-
 
     public Board() {
         this.root = new RootBuilder()
@@ -45,10 +37,24 @@ public class Board {
         this.viewType = ViewType.THREE_BY_FOUR;
     }
 
-    public Board(IRelationshipManager iRelationshipManager, IBoardSerialize iBoardSerialize, IFloatContentManager iFloatContentManager) {
+    public Board(IRelationshipManager iRelationshipManager, IBoardSerialize iBoardSerialize) {
         this();
         this.iRelationshipManager = iRelationshipManager;
         this.iBoardSerialize = iBoardSerialize;
-        this.iFloatContentManager = iFloatContentManager;
+    }
+
+    @Override
+    public String toString() {
+        return "Board{" +
+                "theme='" + theme + '\'' +
+                ", background='" + background + '\'' +
+                ", globalFont='" + globalFont + '\'' +
+                ", zoomLevel=" + zoomLevel +
+                ", title='" + title + '\'' +
+                ", viewType=" + viewType +
+                ", root=" + root +
+                ", iRelationshipManager=" + iRelationshipManager +
+                ", iBoardSerialize=" + iBoardSerialize +
+                '}';
     }
 }

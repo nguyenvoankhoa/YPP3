@@ -1,7 +1,6 @@
 package content;
 
-import dependency.IFloatContentManager;
-import floatcontent.FloatContent;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,13 +25,12 @@ public class Leaf extends Node {
         this.parent = parent;
     }
 
-    public void move(Position position, String nodeId, Root root, IFloatContentManager iFloatContentManager) {
-        Node cur = root.findChild(nodeId);
+    public void move(Position position, String nodeId, Root root) {
+        Node cur = root.findById(nodeId);
         this.parent.removeChild(nodeId);
         Node potentialParent = root.findNodeInRange(position);
         Optional.ofNullable(potentialParent)
-                .ifPresentOrElse(p -> p.addChild(cur),
-                        () -> iFloatContentManager.addContent((FloatContent) cur));
+                .ifPresentOrElse(p -> p.addChild(cur), () -> this.parent = null);
     }
 
 
