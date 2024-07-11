@@ -1,30 +1,39 @@
+USE LMS
+GO
 
-use LMS
-go
 INSERT INTO role (name) VALUES ('mentee'), ('mentor'), ('admin');
 
-INSERT INTO [User] (name, asset_id, role_id, is_active, last_login) VALUES
--- 1 Admin
-('John Doe', 1, 1, 1, '2024-06-24 10:30:00'),
+INSERT INTO Jobtitle (id, name) VALUES
+(1, 'UI/UX Designer'),
+(2, 'Senior Software Engineer'),
+(3, 'CEO'),
+(4, 'Mentor'),
+(5, 'Data Scientist');
 
--- 5 Mentors
-('Jane Smith', 2, 2, 1, '2024-06-23 09:15:00'),
-('Michael Johnson', 3, 2, 1, '2024-06-22 08:20:00'),
-('Emily Brown', 4, 2, 0, '2024-06-21 07:25:00'),
-('David Williams', 5, 2, 1, '2024-06-20 06:30:00'),
-('Sarah Martinez', 6, 2, 0, '2024-06-19 05:35:00'),
+INSERT INTO Location (id, name) VALUES
+(1, 'Ho Chi Minh'),
+(2, 'New York'),
+(3, 'Ha Noi'),
+(4, 'Chicago');
 
--- 10 Mentees
-('Alex Thompson', 7, 3, 1, '2024-06-18 04:40:00'),
-('Jessica Garcia', 8, 3, 0, '2024-06-17 03:45:00'),
-('Daniel Rodriguez', 9, 3, 1, '2024-06-16 02:50:00'),
-('Olivia Hernandez', 10, 3, 0, '2024-06-15 01:55:00'),
-('William Lopez', 11, 3, 1, '2024-06-14 12:00:00'),
-('Sophia King', 12, 3, 0, '2024-06-13 11:05:00'),
-('James Young', 13, 3, 1, '2024-06-12 10:10:00'),
-('Ava Scott', 14, 3, 0, '2024-06-11 09:15:00'),
-('Alexander Green', 15, 3, 1, '2024-06-10 08:20:00'),
-('Ella Baker', 16, 3, 0, '2024-06-09 07:25:00');
+
+INSERT INTO [User] (name, asset_id, location_id, jobtitle_id, role_id, create_at, age, gender, status) VALUES 
+('John Doe', 1, 1, 1, 1, '2024-07-01 08:00:00', 40, 'Male', 1), -- Admin
+('Alice Smith', 2, 2, 2, 2, '2024-07-07 08:00:00', 35, 'Female', 1), -- Mentor
+('Bob Johnson', 3, 3, 3, 2, '2024-07-07 08:00:00', 36, 'Male', 1), -- Mentor
+('Carol White', 4, 4, 4, 2, '2024-07-07 08:00:00', 37, 'Female', 1), -- Mentor
+('David Brown', 5, 1, 5, 2, '2024-07-07 08:00:00', 38, 'Male', 1), -- Mentor
+('Eve Black', 6, 2, 1, 2, '2024-07-07 08:00:00', 39, 'Female', 1), -- Mentor
+('Frank Green', 7, 3, 2, 3, '2024-07-07 08:00:00', 20, 'Male', 1), -- Mentee
+('Grace Lee', 8, 4, 3, 3, '2024-07-07 08:00:00', 21, 'Female', 1), -- Mentee
+('Hank Martin', 9, 1, 4, 3, '2024-07-07 08:00:00', 22, 'Male', 1), -- Mentee
+('Ivy Clark', 10, 2, 5, 3, '2024-7-07 08:00:00', 23, 'Female', 1), -- Mentee
+('Jack Walker', 11, 3, 1, 3, '2024-07-07 08:00:00', 24, 'Male', 1), -- Mentee
+('Kara Adams', 12, 4, 2, 3, '2024-07-07 08:00:00', 25, 'Female', 1), -- Mentee
+('Liam Young', 13, 1, 3, 3, '2024-07-07 08:00:00', 26, 'Male', 1), -- Mentee
+('Mia King', 14, 2, 4, 3, '2024-07-07 08:00:00', 27, 'Female', 1), -- Mentee
+('Noah Scott', 15, 3, 5, 3, '2024-07-07 08:00:00', 28, 'Male', 1), -- Mentee
+('Olivia Baker', 16, 4, 1, 3, '2024-07-07 08:00:00', 29, 'Female', 1); -- Mentee
 
 INSERT INTO Category (name) VALUES
 ('Information Technology'),
@@ -34,7 +43,7 @@ INSERT INTO Category (name) VALUES
 ('Photography'),
 ('Video');
 
-INSERT INTO tag(name) VALUES
+INSERT INTO Tag(tag_name) VALUES
 ('Python'),
 ('Data Science'),
 ('Selenium'),
@@ -73,7 +82,7 @@ INSERT INTO Course (name, category_id, price, description, created_at, mentor_id
 ('Social Media Marketing', 3, 39.99, 'Effective strategies for marketing on social media platforms.', CURRENT_TIMESTAMP, 4, 65),
 ('Personal Development and Wellness', 4, 29.99, 'Techniques for improving personal development and wellness.', CURRENT_TIMESTAMP, 5, 60),
 ('Advanced Photography Techniques', 5, 89.99, 'Advanced techniques for professional photography.', CURRENT_TIMESTAMP, 6, 85),
-('Video Editing for Beginners', 6, 69.99, 'A beginner’s guide to video editing and essential tools.', CURRENT_TIMESTAMP, 2, 80),
+('Video Editing for Beginners', 6, 69.99, 'A beginnerï¿½s guide to video editing and essential tools.', CURRENT_TIMESTAMP, 2, 80),
 ('Machine Learning with Python', 1, 99.99, 'Advanced machine learning concepts and applications using Python.', CURRENT_TIMESTAMP, 3, 85),
 ('User Experience Research', 2, 79.99, 'Methods and tools for conducting user experience research.', CURRENT_TIMESTAMP, 4, 80),
 ('Content Marketing Strategies', 3, 59.99, 'Effective strategies for content marketing.', CURRENT_TIMESTAMP, 5, 75),
@@ -89,7 +98,7 @@ INSERT INTO Course (name, category_id, price, description, created_at, mentor_id
 ('Introduction to SQL', 1, 49.99, 'Learn SQL for database management and data analysis.', CURRENT_TIMESTAMP, 5, 70),
 ('Web Accessibility', 2, 79.99, 'Best practices for creating accessible web designs.', CURRENT_TIMESTAMP, 6, 80);
 
-INSERT INTO sourcetag (source_id, source_type_id, tag_id) VALUES
+INSERT INTO SourceTag (source_id, source_type_id, tag_id) VALUES
 (1, 3, 4),
 (2, 3, 2),
 (2, 3, 11),
@@ -704,7 +713,7 @@ INSERT INTO Resource (asset_id, lesson_id) VALUES
 (203, 100),
 (204, 100);
 
-INSERT INTO discussion (user_id, lesson_id, parent_discussion_id, content, created_at) VALUES
+INSERT INTO Discussion (user_id, lesson_id, parent_discussion_id, content, created_at) VALUES
 (2, 1, NULL, 'I found the introduction to Python programming quite engaging. Looking forward to diving deeper into variables and control structures!', CURRENT_TIMESTAMP),
 (3, 2, NULL, 'The UI/UX design principles course is really insightful. Anyone else excited about learning prototyping techniques?', CURRENT_TIMESTAMP),
 (4, 3, NULL, 'Digital marketing strategies are evolving rapidly. Let''s discuss effective SEO tactics and social media engagement strategies.', CURRENT_TIMESTAMP),
@@ -721,7 +730,7 @@ INSERT INTO discussion (user_id, lesson_id, parent_discussion_id, content, creat
 (15, 4, NULL, 'Personal development and wellness tips have really helped me stay focused. How do you maintain a healthy work-life balance?', CURRENT_TIMESTAMP),
 (16, 2, NULL, 'Learning about web accessibility has opened my eyes to creating inclusive designs. What are your thoughts on accessible web development?', CURRENT_TIMESTAMP);
 
-INSERT INTO review (mentee_id, source_id, rating_star, content, review_at, source_type) VALUES
+INSERT INTO Review (user_id, source_id, rating_star, content, review_at, source_type_id) VALUES
 (7, 11, 4, 'Python course was informative, enjoyed learning!', CURRENT_TIMESTAMP, 1),
 (8, 12, 3, 'UI/UX design principles were interesting but complex.', CURRENT_TIMESTAMP, 1),
 (9, 13, 5, 'Digital marketing strategies were spot on, very practical.', CURRENT_TIMESTAMP, 1),
@@ -791,9 +800,30 @@ INSERT INTO review (mentee_id, source_id, rating_star, content, review_at, sourc
 (13, 37, 3, 'Artificial intelligence course covered advanced topics.', CURRENT_TIMESTAMP, 1),
 (14, 38, 5, 'Project management course was well-structured.', CURRENT_TIMESTAMP, 1),
 (15, 39, 4, 'UX design course enhanced my design skills.', CURRENT_TIMESTAMP, 1),
-(16, 40, 5, 'React course was excellent, learned a lot about frontend development.', CURRENT_TIMESTAMP, 1);
+(16, 40, 5, 'React course was excellent, learned a lot about frontend development.', CURRENT_TIMESTAMP, 1),
+(7, 11, 4, 'Python course was informative, enjoyed learning!', CURRENT_TIMESTAMP, 2),
+(8, 12, 3, 'UI/UX design principles were interesting but complex.', CURRENT_TIMESTAMP, 2),
+(9, 13, 5, 'Digital marketing strategies were spot on, very practical.', CURRENT_TIMESTAMP, 2),
+(10, 14, 4, 'Healthy lifestyle habits course was motivating and helpful.', CURRENT_TIMESTAMP, 2),
+(11, 15, 5, 'Photography masterclass exceeded my expectations!', CURRENT_TIMESTAMP, 2),
+(12, 6, 4, 'Video production essentials course was well-structured.', CURRENT_TIMESTAMP, 2),
+(13, 7, 3, 'Data structures in C++ were challenging but rewarding.', CURRENT_TIMESTAMP, 2),
+(14, 8, 5, 'Introduction to web development was a great starting point.', CURRENT_TIMESTAMP, 2),
+(15, 9, 4, 'Effective communication skills course improved my interactions.', CURRENT_TIMESTAMP, 2),
+(16, 10, 5, 'Financial planning and budgeting course was practical and useful.', CURRENT_TIMESTAMP, 2),
+(11, 1, 5, 'Excellent course, very informative and well-structured.', CURRENT_TIMESTAMP, 2),
+(12, 2, 4, 'Great insights on UI/UX design principles.', CURRENT_TIMESTAMP, 3),
+(13, 3, 3, 'Good content but could be more detailed.', CURRENT_TIMESTAMP, 3),
+(14, 4, 5, 'Practical tips for a healthy lifestyle, highly recommended!', CURRENT_TIMESTAMP, 3),
+(15, 5, 4, 'Learned a lot about photography techniques.', CURRENT_TIMESTAMP, 3),
+(7, 6, 5, 'Fantastic video production course!', CURRENT_TIMESTAMP, 3),
+(8, 7, 4, 'Advanced concepts explained clearly.', CURRENT_TIMESTAMP, 3),
+(9, 8, 3, 'Good introduction to web development.', CURRENT_TIMESTAMP, 3),
+(10, 9, 5, 'Effective communication skills explained well.', CURRENT_TIMESTAMP, 3),
+(15, 10, 4, 'Useful financial planning and budgeting tips.', CURRENT_TIMESTAMP, 3);
 
-INSERT INTO menteeSaveCourse (course_id, mentee_id) VALUES
+
+INSERT INTO MenteeSaveCourse (course_id, mentee_id) VALUES
 (1, 7),
 (2, 8),
 (3, 13),
@@ -805,7 +835,7 @@ INSERT INTO menteeSaveCourse (course_id, mentee_id) VALUES
 (9, 9),
 (10, 10);
 
-INSERT INTO sourceimage (source_id, asset_id, source_type_id) VALUES
+INSERT INTO SourceImage (source_id, asset_id, source_type_id) VALUES
 (1, 101, 1),
 (2, 102, 1),
 (3, 103, 1),
@@ -837,14 +867,14 @@ INSERT INTO sourceimage (source_id, asset_id, source_type_id) VALUES
 (29, 129, 1),
 (30, 130, 1);
 
-INSERT INTO paymentmethod (method) VALUES
+INSERT INTO PaymentMethod (method) VALUES
 ('Credit Card'),
 ('Debit Card'),
 ('PayPal'),
 ('Bank Transfer'),
 ('Cryptocurrency');
 
-INSERT INTO voucher (code, source_id, source_type_id, discount, quantity, expire_date) VALUES
+INSERT INTO Voucher (code, source_id, source_type_id, discount, quantity, expire_date) VALUES
 ('DISCOUNT10', 1, 3, 10.0, 100, '2024-12-31 23:59:59'),
 ('SAVE20', 2, 3, 20.0, 50, '2024-11-30 23:59:59'),
 ('OFFER30', 3, 3, 30.0, 25, '2024-10-31 23:59:59'),
@@ -863,7 +893,7 @@ INSERT INTO UserPaymentInfo (user_id, name_on_card, card_number, expiry_date, pa
 (9, 'Brian Harris', '4999999999999999', '2026-04-30 00:00:00', 3),
 (10, 'Laura Clark', '4000000000000000', '2027-03-31 00:00:00', 2);
 
-INSERT INTO [order] (user_id, user_payment_id, status, created_at) VALUES
+INSERT INTO [Order] (user_id, user_payment_id, status, created_at) VALUES
 (11, 1, 1, CURRENT_TIMESTAMP),
 (12, 2, 2,CURRENT_TIMESTAMP),
 (13, 3, 1, CURRENT_TIMESTAMP),
@@ -875,7 +905,7 @@ INSERT INTO [order] (user_id, user_payment_id, status, created_at) VALUES
 (9, 9, 1, CURRENT_TIMESTAMP),
 (10, 10, 2, CURRENT_TIMESTAMP);
 
-INSERT INTO OrderDetail (order_id, price, source_id, source_type) VALUES
+INSERT INTO OrderDetail (order_id, price, source_id, source_type_id) VALUES
 (1, 49.99, 1, 1),
 (1, 29.99, 2, 1),
 (1, 19.99, 3, 1),
@@ -907,7 +937,19 @@ INSERT INTO OrderDetail (order_id, price, source_id, source_type) VALUES
 (5, 89.99, 29, 1),
 (5, 79.99, 30, 1);
 
-INSERT INTO quiz (name, summary, attempts_allowed, passing_grade, duration, section_id) VALUES
+
+INSERT INTO CartItem (id, user_id, source_id, source_type_id) VALUES
+(1, 7, 1, 3),
+(2, 7, 2, 3),
+(3, 7, 2, 3),
+(4, 8, 4, 3),
+(5, 8, 5, 3),
+(6, 9, 1, 3),
+(7, 9, 2, 3),
+(8, 14, 5, 3);
+
+
+INSERT INTO Quiz (name, summary, attempts_allowed, passing_grade, duration, section_id) VALUES
 ('Introduction to IT', 'Basic concepts of Information Technology.', 3, 70, '00:30:00', 1),
 ('UI/UX Fundamentals', 'Understanding the basics of UI/UX design.', 2, 75, '00:45:00', 2),
 ('Marketing Basics', 'Core principles of marketing.', 3, 60, '01:00:00', 3),
@@ -1054,7 +1096,7 @@ INSERT INTO CourseLearningPath(learning_path_id, course_id) VALUES
 (10, 5),
 (10, 8);
 
-INSERT INTO learningPathProgress (learning_path_id, mentee_id, progress) VALUES
+INSERT INTO LearningPathProgress (learning_path_id, mentee_id, progress) VALUES
 (1, 11, 0.1),
 (2, 12, 0.2),
 (3, 13, 0.3),
@@ -1066,7 +1108,7 @@ INSERT INTO learningPathProgress (learning_path_id, mentee_id, progress) VALUES
 (9, 9, 0.9),
 (10, 10, 1.0);
 
-INSERT INTO menteeCourse (mentee_id, course_id, progress, enroll_at, cert_id, issued_on, expiry_at) VALUES
+INSERT INTO MenteeCourse (mentee_id, course_id, progress, enroll_at, cert_id, issued_on, expiry_at) VALUES
 (7, 1, 50, '2024-05-26 18:32:01', 1, '2023-02-28', '2024-02-28'),
 (7, 2, 70, '2024-05-27 18:32:01', 2, '2023-03-15', '2024-03-15'),
 (8, 3, 30, '2024-05-28 18:32:01', NULL, NULL, NULL),
@@ -1110,7 +1152,7 @@ INSERT INTO menteeCourse (mentee_id, course_id, progress, enroll_at, cert_id, is
 (10, 1, 65, '2024-07-25 18:32:01', 37, '2024-07-01', '2025-07-01'),
 (10, 2, 92, '2024-07-25 18:32:01', 38, '2024-07-15', '2025-07-15');
 
-INSERT INTO [userOnline] (user_id, online_date, online_time) VALUES
+INSERT INTO [UserOnline] (user_id, online_date, online_time) VALUES
 (7, '2023-06-01', '01:00:00'),
 (7, '2023-06-01', '00:30:00'), 
 (7, '2023-06-01', '00:45:00'),  
@@ -1133,7 +1175,7 @@ INSERT INTO [userOnline] (user_id, online_date, online_time) VALUES
 (15, '2023-06-01', '01:15:00'),  
 (15, '2023-06-01', '00:45:00');
 
-INSERT INTO favouriteCategory (mentee_id, category_id) VALUES
+INSERT INTO FavouriteCategory (mentee_id, category_id) VALUES
 (7, 1),
 (7, 2),
 (7, 3),
@@ -1152,15 +1194,19 @@ INSERT INTO favouriteCategory (mentee_id, category_id) VALUES
 (13, 2),
 (13, 1)
 
-INSERT INTO setting (type, name, value) VALUES
-('SourceType', 'course', 1),
-('SourceType', 'challenge', 2),
-('SourceType', 'program', 3),
-('Role', 'Mentee', 1),
-('Role', 'Mentor', 2),
-('Role', 'Admin', 3);
+INSERT INTO Setting (id, setting_type, setting_name, setting_value) VALUES
+(1, 'SourceType', 'course', 1),
+(2, 'SourceType', 'challenge', 2),
+(3, 'SourceType', 'program', 3),
+(4, 'Role', 'Admin', 1),
+(5, 'Role', 'Mentor', 2),
+(6, 'Role', 'Mentee', 3),
+(7, 'Criteria', 'Enrollments', 35),
+(8, 'Criteria', 'Completion Rate', 35),
+(9, 'Criteria', 'Average Learner Rating', 30),
+(10, 'Criteria', 'New Mentee', 30);
 
-INSERT INTO eventType (event_type_name) VALUES
+INSERT INTO EventType (event_type_name) VALUES
 ('Page View'),
 ('Add to Cart'),
 ('Purchase'),
@@ -1189,4 +1235,210 @@ INSERT INTO EventLog (user_id, source_id, source_type_id, event_time) VALUES
 (9, 1, 3, '2024-03-11 00:00:00'),
 (7, 2, 1, '2024-03-12 00:00:00'),
 (7, 3, 2, '2024-04-13 00:00:00'),
-(7, 4, 3, '2024-05-14 00:00:00');
+(7, 4, 3, '2024-05-14 00:00:00'),
+
+(10, 1, 3, '2024-03-02 00:00:00'),
+(10, 1, 1, '2024-03-03 00:00:00'),
+(13, 3, 2, '2024-04-04 00:00:00'),
+(14, 2, 3, '2024-05-05 00:00:00'),
+(15, 2, 1, '2024-06-06 00:00:00'),
+(16,  4, 3, '2024-07-07 00:00:00'),
+(7,  5, 3, '2024-08-08 00:00:00'),
+(8,  3, 3, '2024-09-09 00:00:00'),
+(9,  1, 3, '2024-03-05 00:00:00'),
+(10,  2, 1, '2024-03-06 00:00:00'),
+(11,  3, 2, '2024-04-07 00:00:00'),
+(12,  4, 3, '2024-05-08 00:00:00'),
+(13,  2, 1, '2024-06-09 00:00:00'),
+(14, 4, 3, '2024-07-10 00:00:00'),
+(15,  5, 3, '2024-08-11 00:00:00'),
+(16,  3, 3, '2024-09-12 00:00:00'),
+(7,  1, 3, '2024-03-11 00:00:00'),
+(8,  2, 1, '2024-03-12 00:00:00'),
+(9,  3, 2, '2024-04-13 00:00:00'),
+(10,  4, 3, '2024-05-14 00:00:00');
+
+
+INSERT INTO Program (id, user_id, program_name, description, price, category_id, asset_id) VALUES
+(1, 5, 'Software Engineering Fundamentals', 'Essential software engineering concepts', 33.99, 1, 101),
+(2, 6, 'Data Science', 'Data analysis and machine learning mastery', 12.99, 1, 102),
+(3, 5, 'Web Development Mastery', 'Interactive e-learning platform', 17.77, 1, 103),
+(4, 6, 'Mentoring Hub', 'Personalized professional growth through mentorship', 19.99, 3, 104),
+(5, 5, 'Digital Marketing Bootcamp', 'Comprehensive training in digital marketing strategies and tools', 99.99, 2, 105),
+(6, 1, 'Machine Learning A-Z', 'Complete machine learning guide', 45.99, 1, 106),
+(7, 2, 'Cloud Computing Basics', 'Introduction to cloud services and architecture', 29.99, 4, 107),
+(8, 2, 'Cybersecurity Essentials', 'Fundamentals of cybersecurity practices', 39.99, 3, 108),
+(9, 3, 'Advanced Java Programming', 'Deep dive into Java programming language', 55.00, 1, 109),
+(10, 4, 'Blockchain and Cryptocurrency', 'Understanding blockchain technology and cryptocurrencies', 60.00, 4, 110),
+(11, 5, 'Artificial Intelligence for Beginners', 'Basics of AI and its applications', 70.00, 1, 111),
+(12, 3, 'Project Management Professional (PMP)', 'Comprehensive PMP certification prep', 80.00, 5, 112),
+(13, 4, 'User Experience (UX) Design', 'Designing user-friendly interfaces', 50.00, 2, 113),
+(14, 5, 'Mobile App Development with Flutter', 'Building mobile apps using Flutter', 65.00, 4, 114),
+(15, 1, 'DevOps and Continuous Integration', 'Introduction to DevOps practices and tools', 75.00, 1, 115);
+
+INSERT INTO Challenge (id, user_id, category_id, challenge_name, description, location, phase, start_date) VALUES
+(1,1,1, 'Image Classification', 'The challenge is to develop a deep learning model', 'Remote', 'Starting Phase', '2024-06-26'),
+(2,2,1, 'Fraud Detection Kaggle', 'Participate in a Kaggle competition', 'HCM', 'Starting Phase', '2024-06-27'),
+(3,3,5, 'Short Story Writing', 'Writing a compelling short story', 'Remote', 'Starting Phase', '2024-06-23'),
+(4,1,1, 'Data Prediction', 'Predicting data trends using ML', 'Remote', 'Ending Phase', '2024-06-27'),
+(5,2, 5, 'Recipe Development', 'Creating new and innovative recipes', 'Remote', 'Ending Phase', '2024-06-23'),
+(6,1, 1, 'E-commerce Website', 'Develop a full-stack e-commerce website', 'Remote', 'Starting Phase', '2024-07-01'),
+(7,2, 1, 'Sentiment Analysis', 'Analyze sentiment from social media data', 'Remote', 'Starting Phase', '2024-07-01'),
+(8,3, 2, 'Mobile App Design', 'Design a mobile app for a retail store', 'Remote', 'Starting Phase', '2024-07-01'),
+(9, 3,3, 'Email Marketing Campaign', 'Create an effective email marketing campaign', 'Remote', 'Starting Phase', '2024-07-01'),
+(10, 2,4, 'Personal Finance Blog', 'Write blog posts about personal finance', 'Remote', 'Starting Phase', '2024-07-01'),
+(11, 5,5, 'Food Photography', 'Capture high-quality photos of food dishes', 'Remote', 'Starting Phase', '2024-07-01'),
+(12, 1,6, 'Short Film Editing', 'Edit a short film with provided footage', 'Remote', 'Starting Phase', '2024-07-01'),
+(13, 2,1, 'Real-time Chat Application', 'Build a real-time chat application', 'Remote', 'Starting Phase', '2024-07-01'),
+(14, 3,2, 'Landing Page Optimization', 'Optimize the landing page of a website', 'Remote', 'Starting Phase', '2024-07-01'),
+(15, 6,5, 'Travel Vlog', 'Create a travel vlog with provided footage', 'Remote', 'Starting Phase', '2024-07-01');
+
+
+INSERT INTO ProgramSource (program_id, source_id, source_type_id, source_order) VALUES
+(2, 1, 1, 1),
+(2, 2, 1, 3),
+(3, 3, 1, 3),
+(4, 4, 1, 4),
+(5, 5, 1, 5),
+(2, 1, 2, 2),
+(2, 2, 2, 4),
+(3, 3, 2, 8),
+(4, 4, 2, 9),
+(5, 5, 2, 10);
+
+INSERT INTO ProgramMentor (program_id, user_id) VALUES
+(1, 1),
+(1, 2),
+(2, 3),
+(2, 6),
+(3, 4),
+(3, 5);
+
+INSERT INTO ProgramUser (program_id, user_id, progress_percent, status, start_at) VALUES
+(1, 1, 50, 'In Progress', '2024-01-01'),
+(2, 2, 30, 'In Progress', '2024-02-01'),
+(3, 3, 80, 'Completed', '2024-03-01'),
+(2, 1, 69, 'In Progress', '2024-04-01'),
+(4, 2, 61, 'In Progress', '2024-05-01'),
+(4, 3, 99, 'Completed', '2024-06-01'),
+(5, 4, 81, 'Completed', '2024-07-01'),
+(5, 6, 72, 'In Progress', '2024-08-01'),
+(1, 2, 60, 'In Progress', '2024-07-10'),
+(2, 3, 45, 'In Progress', '2024-06-15'),
+(3, 4, 90, 'Completed', '2024-07-20'),
+(1, 5, 70, 'In Progress', '2024-07-05'),
+(5, 2, 95, 'Completed', '2024-06-23'),
+(3, 1, 50, 'In Progress', '2024-07-12'),
+(4, 1, 60, 'In Progress', '2024-07-08'),
+(5, 1, 70, 'In Progress', '2024-07-15'),
+(1, 3, 80, 'Completed', '2024-07-25'),
+(2, 4, 90, 'Completed', '2024-07-30')
+
+INSERT INTO ChallengeUser (challenge_id, user_id, score, status, date_submission) VALUES
+(1, 1, 8, 'Passed', '2024-06-10'),
+(2, 1, 6, 'Passed', '2024-05-08'),
+(3, 2, 7, 'Passed', '2024-01-23'),
+(4, 2, 3, 'Failed', '2024-02-04'),
+(5, 3, 5, 'Passed', '2024-08-14'),
+(3, 3, 4, 'Failed', '2024-12-17');
+
+
+INSERT INTO Ads (source_type, thumbnail_id, start_at, end_at) VALUES 
+(1, 1, '2023-01-01 08:00:00', '2023-01-31 23:59:59'),
+(2, 2, '2023-02-01 08:00:00', '2023-02-28 23:59:59'),
+(3, 3, '2023-03-01 08:00:00', '2023-03-31 23:59:59'),
+(1, 4, '2023-04-01 08:00:00', '2023-04-30 23:59:59'),
+(2, 5, '2023-05-01 08:00:00', '2023-05-31 23:59:59'),
+(3, 6, '2023-06-01 08:00:00', '2023-06-30 23:59:59'),
+(1, 7, '2023-07-01 08:00:00', '2023-07-31 23:59:59'),
+(2, 8, '2023-08-01 08:00:00', '2023-08-31 23:59:59'),
+(3, 9, '2023-09-01 08:00:00', '2023-09-30 23:59:59'),
+(1, 10, '2023-10-01 08:00:00', '2023-10-31 23:59:59'),
+(2, 1, '2023-11-01 08:00:00', '2023-11-30 23:59:59'),
+(3, 2, '2023-12-01 08:00:00', '2023-12-31 23:59:59');
+
+
+INSERT INTO FollowUser (id, follower_id, followee_id, datefollow) VALUES
+(1, 1, 2, '2022-06-01 10:00:00'),
+(2, 4, 1, '2023-05-15 14:30:00'),
+(3, 2, 1, GETDATE()),
+(4, 3, 2, GETDATE());
+
+INSERT INTO SourceTemplate (id, template_id, source_id, sourcetype_id) VALUES
+(1, 1, 4, 1),
+(2, 2, 3, 3),
+(3, 3, 4, 3),
+(4, 5, 1, 2),
+(5, 4, 5, 1),
+(6, 6, 5, 1),
+(7, 7, 5, 2),
+(8, 8, 4, 3),
+(9, 9, 2, 3),
+(10, 10, 2, 2),
+(11, 11, 2, 2);
+
+INSERT INTO CredentialIssued (id, sourcetemplate_id, user_id, credentialcode, certified_at) VALUES
+(1, 2, 3, '123241', '2024-06-24 12:00:00'),
+(2, 3, 3, '453232', '2024-06-24 12:00:00'),
+(3, 9, 1, '214234', '2024-06-24 12:00:00'),
+(4, 10, 4, '132411', '2024-06-24 12:00:00'),
+(5, 4, 1, '234355', '2024-06-24 12:00:00'),
+(6, 11, 1, '143452', '2024-06-24 12:00:00');
+
+INSERT INTO Company (id, name, img) VALUES 
+(1, 'bbv', 'link'),
+(2, 'Microsoft', 'link'),
+(3, 'FPT Software', 'link');
+
+INSERT INTO WorkingType(id,name) VALUES
+(1 , 'Fulltime'),
+(2 , 'Partime'),
+(3 , 'Online Program' )
+
+INSERT INTO Experience (id, jobtitle_id, company_id, type_id, user_id,isworking) VALUES 
+(1, 1, 1, 1, 1,1),
+(2, 3, 2, 2, 2,1);
+
+INSERT INTO University (id, name, img) VALUES 
+(1, 'HCMC University of Technology and Education', 'link'),
+(2, 'Harvard University', 'link'),
+(3, 'Boston University', 'link');
+
+INSERT INTO Education (id, degree, university_id, user_id) VALUES 
+(1, 'Bachelor degree', 1, 1),
+(2, 'Master degree', 2, 2),
+(3, 'Master of Science', 3, 3);
+
+INSERT INTO Event (id, title, user_id, views, create_at) VALUES 
+(1, 'Zero to Hero - UI/UX Designers', 1, 0, '2024-06-29 12:00:00'),
+(2, 'Professional AI - Workshop', 1, 0, '2024-07-02 12:00:00'),
+(3, 'Hero to zero - Web Developers', 2, 0, '2024-07-03 12:00:00');
+
+INSERT INTO Skill (id, name) VALUES 
+(1, 'Design Software'),
+(2, 'Research'),
+(3, 'User Experience'),
+(4, 'User Interface Design');
+
+INSERT INTO UserSkill (id, user_id, skill_id) VALUES 
+(1, 1, 3),
+(2, 1, 4),
+(3, 2, 1);
+
+INSERT INTO EventUser(id , event_id,user_id) VALUES
+(1,1,1),
+(2,1,2),
+(3,1,3),
+(4,2,4)
+
+INSERT INTO MentorReview (id, sender_id, receiver_id, rating_star, content) VALUES
+(1, 1, 2, 5, 'Excellent work!'),
+(2, 2, 3, 4, 'Very helpful and insightful.'),
+(3, 3, 4, 3, 'Good mentee, but can improve.'),
+(4, 4, 5, 5, 'Amazing job. Highly recommend!'),
+(5, 5, 6, 2, 'Needs to be more punctual.'),
+(6, 1, 3, 4, 'Provided great scored.'),
+(7, 2, 4, 5, 'Exceptional mentee, very knowledgeable.'),
+(8, 3, 5, 3, 'Very good, smart guys.'),
+(9, 4, 6, 4, 'Great mentee, very supportive.'),
+(10, 5, 1, 5, 'Outstanding guidance and support.');
